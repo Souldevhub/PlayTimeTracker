@@ -1,4 +1,4 @@
-name: PlayTime plugin
+name: PlayTimeTracker
 version: '0.1'
 main: com.github.souldevhub.playTimePlugin.PlayTimePlugin
 api-version: '1.21'
