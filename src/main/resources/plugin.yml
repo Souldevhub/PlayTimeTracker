@@ -4,7 +4,7 @@ main: com.github.souldevhub.playTimePlugin.PlayTimePlugin
 api-version: '1.21'
 authors: [ github.com/souldevhub ]
 description: Playtime tracker + ranks for engagement.
-website: instagra.com/shiawase.re
+website: instagram.com/shiawase.re
 commands:
   playtime:
     description: Shows your playtime
