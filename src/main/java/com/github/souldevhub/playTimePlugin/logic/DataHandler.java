@@ -68,7 +68,7 @@ public class DataHandler {
         try {
             config.save(file);
         } catch (IOException e) {
-            plugin.getLogger().severe("Failed to save playtime.yml" + e.getMessage());
+            plugin.getLogger().severe("Failed to save playtime.yml: " + e.getMessage());
         }
     }
 

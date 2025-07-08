@@ -9,3 +9,4 @@ commands:
   playtime:
     description: Shows your playtime
     usage: /playtime
+    aliases: [pt, playrank]

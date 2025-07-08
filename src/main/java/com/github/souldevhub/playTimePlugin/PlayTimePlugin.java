@@ -30,7 +30,7 @@ public final class PlayTimePlugin extends JavaPlugin {
         }
 
 
-        System.out.println("&bPlaytime Tracker loaded!");
+        getLogger().info("Playtime Tracker loaded!");
 
     }
 
@@ -39,6 +39,6 @@ public final class PlayTimePlugin extends JavaPlugin {
         if (dataHandler != null) {
             dataHandler.saveAll();
         }
-        getLogger().info("§cPlaytime Tracker shut down.");
+        getLogger().info("Playtime Tracker shut down.");
     }
 }

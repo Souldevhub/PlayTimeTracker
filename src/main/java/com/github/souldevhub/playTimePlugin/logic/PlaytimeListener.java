@@ -44,11 +44,13 @@ public class PlaytimeListener implements Listener, CommandExecutor {
         }
 
         UUID uuid = player.getUniqueId();
-        long playtimeTicks = tracker.getTotalPlaytimem(uuid);
-        long playtimeMinutes = playtimeTicks / 60;
+        long totalSeconds = tracker.getTotalPlaytime(uuid);
+        long hours = totalSeconds / 3600;
+        long minutes = (totalSeconds % 3600) / 60;
+
 
         MiniMessage mm = MiniMessage.miniMessage();
-        player.sendMessage(mm.deserialize("<aqua>Your playtime is: <gold>" + playtimeMinutes + " minutes"));
+        player.sendMessage(mm.deserialize("<aqua>Your playtime is: <gold>" + hours + " hours <aqua>and <gold>" + minutes + " minutes"));
 
 
         player.sendMessage(
