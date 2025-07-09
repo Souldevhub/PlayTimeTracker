@@ -22,6 +22,10 @@ public class PlaytimeTracker {
         this.dataHandler = dataHandler;
     }
 
+    public long getCurrentSessionPlaytime(UUID uuid) {
+        return sessionTimes.getOrDefault(uuid, 0L);
+    }
+
     public void startTrackingTask() {
         new BukkitRunnable() {
             int flushCounter = 0;

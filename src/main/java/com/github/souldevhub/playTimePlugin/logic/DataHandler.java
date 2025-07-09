@@ -45,6 +45,26 @@ public class DataHandler {
         saveFile();
     }
 
+    public int getPlaytimeSeconds(UUID uuid) {
+        return (int) (getPlaytime(uuid) % 60);
+    }
+
+    public int getPlaytimeMinutes(UUID uuid) {
+        return (int) ((getPlaytime(uuid) / 60) % 60);
+    }
+
+    public long getSavedPlaytime(UUID uuid) {
+        return playtimeCache.getOrDefault(uuid, 0L);
+    }
+
+    public int getPlaytimeHours(UUID uuid) {
+        return (int) ((getPlaytime(uuid) / 3600) % 24);
+    }
+
+    public int getPlaytimeDays(UUID uuid) {
+        return (int) (getPlaytime(uuid) / 86400);
+    }
+
     public void saveAll() {
         for (Map.Entry<UUID, Long> entry : playtimeCache.entrySet()) {
             config.set(entry.getKey().toString(),entry.getValue());
