@@ -61,7 +61,8 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
             case "minutes" -> String.valueOf((overall / 60) % 60);
             case "hours" -> String.valueOf((overall / 3600) % 24);
             case "days" -> String.valueOf(overall / 86400);
-            case "formatted", "overall_formatted" -> formatPlaytime(overall);
+            case "formatted" -> formatPlaytime(current);           // Only current session time formatted
+            case "overall_formatted" -> formatPlaytime(overall); // Overall time formatted
             case "saved" -> String.valueOf(saved);
             case "current" -> String.valueOf(current);
             case "overall" -> String.valueOf(overall);
