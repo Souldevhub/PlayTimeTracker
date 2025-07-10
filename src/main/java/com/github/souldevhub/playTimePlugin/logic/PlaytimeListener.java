@@ -1,6 +1,9 @@
 package com.github.souldevhub.playTimePlugin.logic;
 
 
+import com.github.souldevhub.playTimePlugin.PlayTimeConfig;
+import com.github.souldevhub.playTimePlugin.PlayTimePlugin;
+import com.github.souldevhub.playTimePlugin.RewardsGUI;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,9 +22,11 @@ import java.util.UUID;
 public class PlaytimeListener implements Listener, CommandExecutor {
 
     private final PlaytimeTracker tracker;
+    private final PlayTimePlugin plugin;
 
-    public PlaytimeListener(PlaytimeTracker tracker) {
+    public PlaytimeListener(PlaytimeTracker tracker, PlayTimePlugin plugin) {
         this.tracker = tracker;
+        this.plugin = plugin;
     }
 
     @EventHandler
@@ -57,7 +62,7 @@ public class PlaytimeListener implements Listener, CommandExecutor {
         player.sendMessage(
                 Component.text("Opening playtime menu...", NamedTextColor.GRAY)
         );
-
+        RewardsGUI.open(player, tracker, plugin.getClaimedRewardsHandler());
         return true;
     }
 }

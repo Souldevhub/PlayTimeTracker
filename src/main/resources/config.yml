@@ -1,0 +1,61 @@
+rewards:
+  - id: squire_rank
+    name: "&7Squire"
+    material: IRON_SWORD
+    slot: 10
+    lore:
+      - "&fThe journey begins."
+      - "&7You are but a humble squire, learning the ways of the realm."
+      - ""
+      - "&8Earn your place among the knights."
+    requiredPlaytime: 1800 # 30 minutes
+    commands:
+      - "lp user %player% parent add squire"
+  - id: knight_rank
+    name: "&fKnight"
+    material: IRON_CHESTPLATE
+    slot: 12
+    lore:
+      - "&fA sworn protector of the land."
+      - "&7You have proven your valor and loyalty."
+      - ""
+      - "&8Ride forth and defend the weak."
+    requiredPlaytime: 7200 # 2 hours
+    commands:
+      - "lp user %player% parent add knight"
+  - id: paladin_rank
+    name: "&ePaladin"
+    material: GOLDEN_SWORD
+    slot: 14
+    lore:
+      - "&eA champion of light."
+      - "&7Your deeds inspire hope in the hearts of many."
+      - ""
+      - "&8Let your faith be your shield."
+    requiredPlaytime: 21600 # 6 hours
+    commands:
+      - "lp user %player% parent add paladin"
+  - id: warlock_rank
+    name: "&5Warlock"
+    material: ENCHANTED_BOOK
+    slot: 16
+    lore:
+      - "&5Master of arcane secrets."
+      - "&7You have delved into forbidden knowledge."
+      - ""
+      - "&8Wield your power wisely."
+    requiredPlaytime: 43200 # 12 hours
+    commands:
+      - "lp user %player% parent add warlock"
+  - id: dragonlord_rank
+    name: "&cDragonlord"
+    material: DRAGON_HEAD
+    slot: 22
+    lore:
+      - "&cRuler of flame and sky."
+      - "&7Your legend echoes across the world."
+      - ""
+      - "&8Few dare challenge your might."
+    requiredPlaytime: 86400 # 24 hours
+    commands:
+      - "lp user %player% parent add dragonlord"
