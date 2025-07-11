@@ -10,6 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class RewardsGUIListener implements Listener {
 
@@ -39,7 +41,7 @@ public class RewardsGUIListener implements Listener {
         int clickedSlot = event.getRawSlot();
         RewardSlot matchedReward = null;
         for (RewardSlot slot : PlayTimeConfig.getInstance().getRewardSlots()) {
-            if (slot.getSlot() == clickedSlot) {
+            if (slot.slot() == clickedSlot) {
                 matchedReward = slot;
                 break;
             }
@@ -49,17 +51,18 @@ public class RewardsGUIListener implements Listener {
             return;
         }
 
-        boolean claimed = claimedIds.contains(matchedReward.getId());
-        boolean enoughPlaytime = playtime >= matchedReward.getRequiredPlaytime();
+        boolean claimed = claimedIds.contains(matchedReward.id());
+        boolean enoughPlaytime = playtime >= matchedReward.requiredPlaytime();
 
         // Only allow claim if not claimed and enough playtime and the clicked item is the reward's original material
-        if (!claimed && enoughPlaytime && clicked.getType() == matchedReward.getMaterial()) {
-            for (String cmd : matchedReward.getCommands()) {
+        if (!claimed && enoughPlaytime && clicked.getType() == matchedReward.material()) {
+            for (String cmd : matchedReward.commands()) {
                 String parsed = cmd.replace("%player%", player.getName());
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parsed);
             }
-            claimedHandler.addClaimedReward(player.getUniqueId(), matchedReward.getId());
-            player.sendMessage("You claimed: %s".formatted(matchedReward.getMaterial()));
+            claimedHandler.addClaimedReward(player.getUniqueId(), matchedReward.id());
+            Component rewardName = LegacyComponentSerializer.legacyAmpersand().deserialize(matchedReward.name());
+            player.sendMessage(Component.text("You have successfully claimed the reward: ", NamedTextColor.GREEN).append(rewardName));
             player.closeInventory();
             return;
         }

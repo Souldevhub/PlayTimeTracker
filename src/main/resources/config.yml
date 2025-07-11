@@ -4,58 +4,72 @@ rewards:
     material: IRON_SWORD
     slot: 10
     lore:
-      - "&fThe journey begins."
-      - "&7You are but a humble squire, learning the ways of the realm."
+      - "&7The journey begins."
+      - "&7You are but a humble squire."
       - ""
-      - "&8Earn your place among the knights."
+      - "&7Learn the ways of the realm."
+      - "&7Earn your place among the knights."
     requiredPlaytime: 1800 # 30 minutes
     commands:
       - "lp user %player% parent add squire"
+      - "give %player% iron_sword{display:{Name:'{\"text\":\"Training Blade\",\"color\":\"gray\"}'}} 1"
+
   - id: knight_rank
     name: "&fKnight"
     material: IRON_CHESTPLATE
     slot: 12
     lore:
       - "&fA sworn protector of the land."
-      - "&7You have proven your valor and loyalty."
+      - "&fYour valor has been proven."
       - ""
-      - "&8Ride forth and defend the weak."
+      - "&fDefend the weak."
+      - "&fFight with honor."
     requiredPlaytime: 7200 # 2 hours
     commands:
       - "lp user %player% parent add knight"
+      - "effect give %player% strength 60 0 true"
+
   - id: paladin_rank
     name: "&ePaladin"
     material: GOLDEN_SWORD
     slot: 14
     lore:
       - "&eA champion of light."
-      - "&7Your deeds inspire hope in the hearts of many."
+      - "&eYour deeds inspire the realm."
       - ""
-      - "&8Let your faith be your shield."
+      - "&eLet your faith be your shield."
+      - "&eBring justice with every strike."
     requiredPlaytime: 21600 # 6 hours
     commands:
       - "lp user %player% parent add paladin"
+      - "give %player% golden_apple 3"
+
   - id: warlock_rank
     name: "&5Warlock"
     material: ENCHANTED_BOOK
     slot: 16
     lore:
       - "&5Master of arcane secrets."
-      - "&7You have delved into forbidden knowledge."
+      - "&5You delve into forbidden magic."
       - ""
-      - "&8Wield your power wisely."
+      - "&5Wield your power wisely."
+      - "&5Knowledge is your true weapon."
     requiredPlaytime: 43200 # 12 hours
     commands:
       - "lp user %player% parent add warlock"
+      - "effect give %player% night_vision 300 0 true"
+
   - id: dragonlord_rank
     name: "&cDragonlord"
     material: DRAGON_HEAD
     slot: 22
     lore:
       - "&cRuler of flame and sky."
-      - "&7Your legend echoes across the world."
+      - "&cYour legend echoes through time."
       - ""
-      - "&8Few dare challenge your might."
+      - "&cFew dare challenge your might."
+      - "&cCommand dragons and destiny alike."
     requiredPlaytime: 86400 # 24 hours
     commands:
       - "lp user %player% parent add dragonlord"
+      - "give %player% fire_charge 10"

@@ -1,7 +1,7 @@
 package com.github.souldevhub.playTimePlugin.logic;
 
 
-import com.github.souldevhub.playTimePlugin.PlayTimeConfig;
+
 import com.github.souldevhub.playTimePlugin.PlayTimePlugin;
 import com.github.souldevhub.playTimePlugin.RewardsGUI;
 import net.kyori.adventure.text.minimessage.MiniMessage;

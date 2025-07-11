@@ -69,7 +69,4 @@ public final class PlayTimePlugin extends JavaPlugin {
     public ClaimedRewardsHandler getClaimedRewardsHandler() {
         return claimedRewardsHandler;
     }
-    public PlaytimeTracker getPlaytimeTracker() {
-        return playtimeTracker;
-    }
 }

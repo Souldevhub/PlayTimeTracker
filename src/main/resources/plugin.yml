@@ -1,5 +1,5 @@
 name: PlayTimeTracker
-version: '0.3.0'
+version: '1.0.0'
 main: com.github.souldevhub.playTimePlugin.PlayTimePlugin
 api-version: '1.21'
 authors: [ github.com/souldevhub ]
