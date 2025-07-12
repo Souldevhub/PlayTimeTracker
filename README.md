@@ -12,7 +12,7 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
   - Opens a GUI to claim playtime-based rewards
 - 🎁 Reward System:
   - Milestone-based claimable rewards
-  - Supports permission grants, commands, and messages
+  - Supports commands (since most of things are given by commands)
   - Blocks duplicate claiming with tracked saves
 - 🔌 Full PlaceholderAPI support
 - 📁 Flat-file storage with autosave
@@ -22,9 +22,9 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 
 ## 🔧 Commands
 
-| Command          | Description                             | Permission              |
-|------------------|-----------------------------------------|--------------------------|
-| `/playtime`      | Shows playtime and opens rewards GUI    | `playtimetracker.use`   |
+| Command          | Description                             | Permission |
+|------------------|-----------------------------------------|----------|
+| `/playtime`      | Shows playtime and opens rewards GUI    |    -     |
 
 ---
 
@@ -50,8 +50,7 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 
 ## 📁 Configuration
 
-- `rewards.yml`: Define playtime milestones, rewards, permissions, and commands
-- `config.yml`: General settings, autosave interval, command toggles
+- `config.yml`: Define playtime milestones, rewards (commands), requirements, rewards icon/lore.
 
 ---
 
@@ -60,7 +59,7 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 1. Download the latest release
 2. Drop the `.jar` file into your `/plugins` folder
 3. Restart the server
-4. Configure `rewards.yml` to define milestones and actions
+4. Configure `config.yml` to define rewards / requirements.
 5. (Optional) Install [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/) for placeholders
 
 ---
@@ -68,8 +67,8 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 ## ✅ Requirements
 
 - Minecraft: `1.21.7`
-- Java: `17+`
-- Server: Paper / Pufferfish / Purpur
+- Java: `21+`
+- Server: Paper / Pufferfish / Purpur (others need testing)
 - (Optional) PlaceholderAPI
 
 ---
@@ -77,7 +76,7 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 ## 💬 Support
 
 - 📬 [Open an issue](https://github.com/Souldevhub/PlayTimeTracker/issues)
-- 💻 Discord: `souldevhub`
+- 💻 [Discord](https://discord.gg/6SCAZfENjw)
 
 ---
 
