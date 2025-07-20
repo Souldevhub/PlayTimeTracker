@@ -9,6 +9,7 @@ public record RewardSlot(
     String id,
     String name,
     Material material,
+    String headId,
     int slot,
     List<String> lore,
     List<String> commands,

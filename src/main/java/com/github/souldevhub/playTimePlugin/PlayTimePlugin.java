@@ -18,7 +18,8 @@ public final class PlayTimePlugin extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         saveDefaultConfig();
-        PlayTimeConfig.getInstance().loadConfig(this);
+        PlayTimeConfig.getInstance(this).loadConfig(this);
+        RewardsGUI.init(this);
 
         this.dataHandler = new DataHandler(this);
         this.playtimeTracker = new PlaytimeTracker(this, dataHandler);
@@ -27,7 +28,7 @@ public final class PlayTimePlugin extends JavaPlugin {
 
         // Register RewardsGUIListener with dependencies
         getServer().getPluginManager().registerEvents(
-            new RewardsGUIListener(playtimeTracker, claimedRewardsHandler), this
+            new RewardsGUIListener(playtimeTracker, claimedRewardsHandler, this), this
         );
 
 

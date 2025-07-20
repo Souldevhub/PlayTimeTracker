@@ -12,15 +12,18 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class RewardsGUIListener implements Listener {
 
     private final PlaytimeTracker tracker;
     private final ClaimedRewardsHandler claimedHandler;
+    private final JavaPlugin plugin;
 
-    public RewardsGUIListener(PlaytimeTracker tracker, ClaimedRewardsHandler claimedHandler) {
+    public RewardsGUIListener(PlaytimeTracker tracker, ClaimedRewardsHandler claimedHandler, JavaPlugin plugin) {
         this.tracker = tracker;
         this.claimedHandler = claimedHandler;
+        this.plugin = plugin;
     }
 
     @EventHandler
@@ -40,7 +43,7 @@ public class RewardsGUIListener implements Listener {
         // Find the reward by slot (not by material or lore)
         int clickedSlot = event.getRawSlot();
         RewardSlot matchedReward = null;
-        for (RewardSlot slot : PlayTimeConfig.getInstance().getRewardSlots()) {
+        for (RewardSlot slot : PlayTimeConfig.getInstance(plugin).getRewardSlots()) {
             if (slot.slot() == clickedSlot) {
                 matchedReward = slot;
                 break;
