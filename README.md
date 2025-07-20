@@ -14,6 +14,7 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
   - Milestone-based claimable rewards
   - Supports commands (since most of things are given by commands)
   - Blocks duplicate claiming with tracked saves
+  - Player head support for GUI icons (e.g., custom heads, player skulls)
 - 🔌 Full PlaceholderAPI support
 - 📁 Flat-file storage with autosave
 - ⚙️ Performance optimized and easy to configure
@@ -66,7 +67,7 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 
 ## ✅ Requirements
 
-- Minecraft: `1.21.7`
+- Minecraft: `1.21 up to 1.21.8`
 - Java: `21+`
 - Server: Paper / Pufferfish / Purpur (others need testing)
 - (Optional) PlaceholderAPI
