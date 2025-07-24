@@ -3,7 +3,6 @@ package com.github.souldevhub.playTimePlugin.placeholders;
 import com.github.souldevhub.playTimePlugin.logic.DataHandler;
 import com.github.souldevhub.playTimePlugin.logic.PlaytimeTracker;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,23 +21,19 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getIdentifier() {
-        return "playtime"; // Placeholder prefix
+        return "playtime";
     }
 
     @Override
     public @NotNull String getAuthor() {
-        return "souldevhub"; // Your name or plugin author
+        return "souldevhub";
     }
 
     @Override
     public @NotNull String getVersion() {
-        return "1.0.0"; // Version of your expansion
+        return "1.0.0";
     }
 
-    @Override
-    public boolean canRegister() {
-        return this.getRequiredPlugin() == null || Bukkit.getPluginManager().getPlugin(this.getRequiredPlugin()) != null;
-    }
 
 
     @Override

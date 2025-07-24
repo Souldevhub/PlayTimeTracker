@@ -1,4 +1,4 @@
-# ⏱️ PlayTimeTracker
+# ⏱️ PlayTimePulse
 
 A lightweight, accurate Minecraft plugin that tracks player playtime, integrates seamlessly with PlaceholderAPI, and provides a built-in rewards system with a claimable GUI.
 
@@ -12,10 +12,12 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
   - Opens a GUI to claim playtime-based rewards
 - 🎁 Reward System:
   - Milestone-based claimable rewards
-  - Supports commands (since most of things are given by commands)
+  - Supports commands (since most of the things are given by commands)
   - Blocks duplicate claiming with tracked saves
   - Player head support for GUI icons (e.g., custom heads, player skulls)
+  - Custom sound effects when claiming rewards
 - 🔌 Full PlaceholderAPI support
+- 📊 bStats integration for anonymous usage statistics
 - 📁 Flat-file storage with autosave
 - ⚙️ Performance optimized and easy to configure
 
@@ -23,35 +25,41 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 
 ## 🔧 Commands
 
-| Command          | Description                             | Permission |
-|------------------|-----------------------------------------|----------|
-| `/playtime`      | Shows playtime and opens rewards GUI    |    -     |
+| Command                                        | Description                                 | Permission     |
+|------------------------------------------------|---------------------------------------------|----------------|
+| `/playtime`                                    | Shows playtime and rewards GUI              | playtime.use   |
+| `/playtime add <player> <hours>h [<minutes>m]` | Add playtime to player                      | playtime.admin |
+| `/playtime reset <player>`                     | Reset player's playtime and claimed rewards | playtime.admin |
 
 ---
 
 ## 🧩 PlaceholderAPI Support
 
-| Placeholder                      | Description                                               |
-|----------------------------------|-----------------------------------------------------------|
-| `%playtime_overall_formatted%`  | Total time (saved + current), formatted like `2d 4h 30m`  |
-| `%playtime_formatted%`          | Current session only, formatted                          |
-| `%playtime_overall%`            | Total time in seconds (saved + current)                  |
-| `%playtime_saved%`              | Saved playtime only (in seconds)                         |
-| `%playtime_current%`            | Current online session (in seconds)                      |
+| Placeholder                    | Description                                              |
+|--------------------------------|----------------------------------------------------------|
+| `%playtime_overall_formatted%` | Total time (saved + current), formatted like `2d 4h 30m` |
+| `%playtime_formatted%`         | Current session only, formatted                          |
+| `%playtime_overall%`           | Total time in seconds (saved + current)                  |
+| `%playtime_saved%`             | Saved playtime only (in seconds)                         |
+| `%playtime_current%`           | Current online session (in seconds)                      |
 
 ---
 
 ## 🧪 Future Plans
 
 - 🎨 Gradient color support for formatted text
-- 🔊 Customizable sounds and particle effects
 - 🎯 Configurable GUI slots for rewards
+- 🌟 Particle effects for reward claiming
 
 ---
 
 ## 📁 Configuration
 
-- `config.yml`: Define playtime milestones, rewards (commands), requirements, rewards icon/lore.
+- `config.yml`: Define playtime milestones, rewards (commands), requirements, rewards icon/lore, and sound effects.
+  - Each reward can have a custom sound when claimed using the `claimSound` parameter
+  - Choose from over 400 Minecraft sounds (e.g., `entity.player.levelup`, `block.note_block.pling`)
+  - All sounds play at standard volume (1.0) and pitch (1.0)
+  - Custom heads can be added using `headId` with Base64 texture values
 
 ---
 
@@ -74,9 +82,19 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 
 ---
 
+## 📊 Statistics
+
+PlayTimePulse collects anonymous usage statistics through bStats. This helps us understand how the plugin is used and guides future development.
+
+You can view plugin statistics at [bStats](https://bstats.org/plugin/bukkit/PlayTimePulse/26638).
+
+To opt out of statistics collection, set `enabled: false` in the `/plugins/bStats/config.yml` file.
+
+---
+
 ## 💬 Support
 
-- 📬 [Open an issue](https://github.com/Souldevhub/PlayTimeTracker/issues)
+- 📬 [Open an issue](https://github.com/Souldevhub/PlayTimePulse/issues)
 - 💻 [Discord](https://discord.gg/6SCAZfENjw)
 
 ---

@@ -61,10 +61,21 @@ public class PlayTimeConfig {
                     @SuppressWarnings("unchecked")
                     List<String> commands = map.get("commands") instanceof List<?> l ? (List<String>) l : new ArrayList<>();
                     long requiredPlaytime = map.get("requiredPlaytime") instanceof Number n ? n.longValue() : 0L;
+
+                    // Parse sound configuration
+                    String claimSound = map.get("claimSound") != null ? map.get("claimSound").toString() : null;
+
                     if (!id.isEmpty() && !matName.isEmpty()) {
                         try {
                             Material mat = Material.valueOf(matName.toUpperCase());
-                            loadedSlots.add(new RewardSlot(id, name, mat, headId, slot, lore, commands, requiredPlaytime));
+                            RewardSlot reward = new RewardSlot(id, name, mat, headId, slot, lore, commands, 
+                                    requiredPlaytime, claimSound);
+                            loadedSlots.add(reward);
+
+                            // Pre-validate and log information about the loaded sound
+                            if (claimSound != null && !claimSound.isEmpty()) {
+                                plugin.getLogger().info("Loaded reward '" + id + "' with sound configuration");
+                            }
                         } catch (IllegalArgumentException ignored) {
                             plugin.getLogger().warning("Invalid material name in config: " + matName);
                         }
@@ -102,13 +113,17 @@ public class PlayTimeConfig {
         for (RewardSlot reward : rewardSlots) {
             boolean claimed = claimedIds.contains(reward.id());
             boolean enoughPlaytime = playtime >= reward.requiredPlaytime();
-            Material displayMaterial = claimed ? Material.BARRIER : reward.material();
 
             ItemStack item;
-            if (displayMaterial == Material.PLAYER_HEAD && reward.headId() != null && !claimed) {
+            if (claimed) {
+
+                item = new ItemStack(Material.BARRIER);
+            } else if (reward.material() == Material.PLAYER_HEAD && reward.headId() != null) {
+
                 item = createCustomHead(reward.headId());
             } else {
-                item = new ItemStack(displayMaterial);
+
+                item = new ItemStack(reward.material());
             }
 
             List<Component> loreComponents = new ArrayList<>();

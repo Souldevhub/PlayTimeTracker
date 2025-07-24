@@ -1,9 +1,14 @@
-rewards:
+  # Sound names can be found here: https://www.digminecraft.com/lists/sound_list_pc.php
+  # All sounds play at standard volume (1.0) and pitch (1.0)
+
+  rewards:
   - id: squire_rank
     name: "&7Squire"
     material: PLAYER_HEAD
     headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTg0ZjE3ODEwNWJjOTFlYjZhZTMyODg3OWYxY2Y4OTAyYzIzNjA2MTY5OGZlNWEwZmUyYzUxMjQ2MzQ0MDRiMyJ9fX0="
     slot: 10
+    # Sound played when claiming this reward
+    claimSound: ITEM.GOAT_HORN.SOUND.0
     lore:
       - "&7The journey begins."
       - "&7You are but a humble squire."
@@ -24,6 +29,7 @@ rewards:
     material: PLAYER_HEAD
     headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWEzZTFhMDUwZmZkYWUyY2YzNDJmZTM4YzYxZWJhYzdlMDZhYzU4Y2UxYTYwMDNmZTIzZWE4YWU0YjU4YzYwOCJ9fX0="
     slot: 12
+    claimSound: block.anvil.place
     lore:
       - "&fA sworn protector of the land."
       - "&fYour valor has been proven."
@@ -45,6 +51,7 @@ rewards:
     material: PLAYER_HEAD
     headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDEzZTM5ODkwYjE2NjhiYTdiYmY2MTY4MWI4MDM5Njg1ODVkOTNiM2E5OTQ0ZDlkYzhiYThmMTcwMGExMDkyYiJ9fX0="
     slot: 14
+    claimSound: ENTITY.EVOKER.PREPARE_SUMMON
     lore:
       - "&eA champion of light."
       - "&eYour deeds inspire the realm."
@@ -67,6 +74,7 @@ rewards:
     material: PLAYER_HEAD
     headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGUyMmM1MmU5N2Q5YmE3YmUyMmUwNDdiZWQzYTNkYmM5ODBjNzExNDA0YWQ3ODZlNGI5YWQyMjFhZjczNDVmOSJ9fX0="
     slot: 16
+    claimSound: ENTITY.LIGHTNING_BOLT.THUNDER
     lore:
       - "&5Master of arcane secrets."
       - "&5You delve into forbidden magic."
@@ -89,6 +97,7 @@ rewards:
     material: DRAGON_EGG
     headId:
     slot: 22
+    claimSound: ENTITY.ENDER_DRAGON.GROWL
     lore:
       - "&cRuler of flame and sky."
       - "&cYour legend echoes through time."

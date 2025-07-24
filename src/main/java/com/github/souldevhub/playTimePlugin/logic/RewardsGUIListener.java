@@ -5,6 +5,7 @@ import com.github.souldevhub.playTimePlugin.RewardSlot;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,6 +26,7 @@ public class RewardsGUIListener implements Listener {
         this.claimedHandler = claimedHandler;
         this.plugin = plugin;
     }
+    
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
@@ -40,7 +42,7 @@ public class RewardsGUIListener implements Listener {
         long playtime = tracker.getTotalPlaytime(player.getUniqueId());
         var claimedIds = claimedHandler.getClaimedRewards(player.getUniqueId());
 
-        // Find the reward by slot (not by material or lore)
+
         int clickedSlot = event.getRawSlot();
         RewardSlot matchedReward = null;
         for (RewardSlot slot : PlayTimeConfig.getInstance(plugin).getRewardSlots()) {
@@ -57,18 +59,38 @@ public class RewardsGUIListener implements Listener {
         boolean claimed = claimedIds.contains(matchedReward.id());
         boolean enoughPlaytime = playtime >= matchedReward.requiredPlaytime();
 
-        // Only allow claim if not claimed and enough playtime and the clicked item is the reward's original material
+
         if (!claimed && enoughPlaytime && clicked.getType() == matchedReward.material()) {
             for (String cmd : matchedReward.commands()) {
                 String parsed = cmd.replace("%player%", player.getName());
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parsed);
             }
             claimedHandler.addClaimedReward(player.getUniqueId(), matchedReward.id());
+
+            // Play custom reward sound if configured
+            try {
+                // Get the sound from the reward configuration
+                org.bukkit.Sound bukkitSound = matchedReward.getSound(plugin);
+
+                // Directly play the sound using Bukkit API
+                player.playSound(player.getLocation(), bukkitSound, matchedReward.soundVolume(), matchedReward.soundPitch());
+
+                plugin.getLogger().info("Playing sound for reward: " + matchedReward.id());
+            } catch (Exception e) {
+                // Fallback to default sound if any error occurs
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+                plugin.getLogger().warning("Error playing sound for reward: " + matchedReward.id() + ". " + e.getMessage());
+            }
+
+
+
+
             Component rewardName = LegacyComponentSerializer.legacyAmpersand().deserialize(matchedReward.name());
             player.sendMessage(Component.text("You have successfully claimed the reward: ", NamedTextColor.GREEN).append(rewardName));
             player.closeInventory();
             return;
         }
         player.sendMessage("§cYou cannot claim this reward.");
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 0.8f, 1.0f);
     }
 }

@@ -17,11 +17,18 @@ public class ClaimedRewardsHandler {
         this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), "claimed_rewards.yml");
         if (!file.exists()) {
-            try { file.createNewFile(); } catch (IOException ignored) {}
+            try {
+                if (!file.createNewFile()) {
+                    plugin.getLogger().warning("Couldn't create claimed_rewards.yml file. Please check permissions.");
+                }
+            } catch (IOException e) {
+                plugin.getLogger().severe("Error during file creation: " + e.getMessage());
+            }
         }
         this.config = YamlConfiguration.loadConfiguration(file);
         loadAll();
     }
+
 
     public List<String> getClaimedRewards(UUID uuid) {
         return claimedCache.getOrDefault(uuid, new ArrayList<>());
@@ -34,6 +41,16 @@ public class ClaimedRewardsHandler {
             config.set(uuid.toString(), claimed);
             saveFile();
         }
+    }
+
+    /**
+     * Resets all claimed rewards for the specified player
+     * @param uuid Player's UUID
+     */
+    public void resetClaimedRewards(UUID uuid) {
+        claimedCache.remove(uuid);
+        config.set(uuid.toString(), null);
+        saveFile();
     }
 
     private void loadAll() {

@@ -4,6 +4,7 @@ package com.github.souldevhub.playTimePlugin;
 import com.github.souldevhub.playTimePlugin.logic.*;
 
 import com.github.souldevhub.playTimePlugin.placeholders.PlaceholderAPIHook;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,9 +17,20 @@ public final class PlayTimePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        int pluginId = 26638;
+        new Metrics(this, pluginId);
         // Plugin startup logic
         saveDefaultConfig();
-        PlayTimeConfig.getInstance(this).loadConfig(this);
+
+        // Load configuration and pre-validate sounds
+        Bukkit.getScheduler().runTask(this, () -> {
+            getLogger().info("Loading reward configuration...");
+            PlayTimeConfig.getInstance(this).loadConfig(this);
+
+            int rewardCount = PlayTimeConfig.getInstance(this).getRewardSlots().size();
+            getLogger().info("Loaded " + rewardCount + " reward slots from configuration");
+        });
+        // Initialize RewardsGUI
         RewardsGUI.init(this);
 
         this.dataHandler = new DataHandler(this);
@@ -46,12 +58,13 @@ public final class PlayTimePlugin extends JavaPlugin {
         PluginCommand command = getCommand("playtime");
         if (command != null) {
             command.setExecutor(listener);
+            command.setTabCompleter(listener);
         } else {
             getLogger().severe("Command 'playtime' is not defined in plugin.yml!");
         }
 
 
-        getLogger().info("Playtime Tracker loaded!");
+        getLogger().info("PlayTimePulse loaded!");
 
     }
 
@@ -64,10 +77,14 @@ public final class PlayTimePlugin extends JavaPlugin {
             }
             dataHandler.saveAll();
         }
-        getLogger().info("Playtime Tracker shut down.");
+        getLogger().info("PlayTimePulse shut down.");
     }
 
     public ClaimedRewardsHandler getClaimedRewardsHandler() {
         return claimedRewardsHandler;
+    }
+
+    public DataHandler getDataHandler() {
+        return dataHandler;
     }
 }
