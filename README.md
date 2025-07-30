@@ -4,18 +4,45 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 
 ---
 
-## 📦 Features
+## 🌟 Main Features
+
+- ⏳ **Real-time Playtime Tracking** - Accurately tracks how long each player has been on your server
+- 🎁 **24+ Playtime Rewards** - Milestone-based rewards that players can claim as they play more
+- 📖 **Pageable Rewards GUI** - Easy-to-navigate interface with multiple pages for all rewards
+- 🧾 **Simple Commands** - Intuitive `/playtime` command for players and admin tools
+- 🔌 **PlaceholderAPI Support** - Integrates with popular plugins through placeholders
+- 🛡️ **AFK Protection** - Prevents players from cheating by being AFK
+- 💾 **Efficient Data Storage** - Lightweight flat-file storage with automatic saving
+- ⚡ **High Performance** - Optimized code that won't slow down your server
+- 🛡️ **Reward Error Handling** - Prevents reward spamming even when commands fail
+- ⚙️ **Flexible Configuration** - Easily customize all rewards, GUI, and settings
+
+## 📦 All Features
 
 - ⏳ Real-time playtime tracking (saved + current session)
 - 🧾 `/playtime` command:
   - Shows formatted playtime in `Xd Yh Zm`
   - Opens a GUI to claim playtime-based rewards
 - 🎁 Reward System:
-  - Milestone-based claimable rewards
+  - Milestone-based claimable rewards (24 rewards included in current config, with more to be added over time)
   - Supports commands (since most of the things are given by commands)
   - Blocks duplicate claiming with tracked saves
   - Player head support for GUI icons (e.g., custom heads, player skulls)
   - Custom sound effects when claiming rewards
+  - Error handling for failed commands to prevent reward spamming
+- 📖 Pageable Rewards GUI:
+  - Pagination support for large numbers of rewards
+  - Customizable slots per page
+  - Navigation buttons for moving between pages
+- 🧭 Navigation System:
+  - Previous/Next page buttons
+  - Close button to exit the GUI
+  - Customizable navigation button materials and names
+  - Optional custom head textures for navigation buttons
+- 🛡️ AFK Protection:
+  - Prevents AFK farming of playtime
+  - Configurable interaction threshold and time window
+  - Tracks meaningful player interactions to validate activity
 - 🔌 Full PlaceholderAPI support
 - 📊 bStats integration for anonymous usage statistics
 - 📁 Flat-file storage with autosave
@@ -48,8 +75,9 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 ## 🧪 Future Plans
 
 - 🎨 Gradient color support for formatted text
-- 🎯 Configurable GUI slots for rewards
 - 🌟 Particle effects for reward claiming
+- 🐛 Debug mode for easier troubleshooting
+- ➕ More features coming soon
 
 ---
 
@@ -60,6 +88,12 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
   - Choose from over 400 Minecraft sounds (e.g., `entity.player.levelup`, `block.note_block.pling`)
   - All sounds play at standard volume (1.0) and pitch (1.0)
   - Custom heads can be added using `headId` with Base64 texture values
+  - Specify which page a reward should appear on using the `page` parameter (starting from 0)
+  - Navigation buttons can use custom player heads with `headId` parameter
+  - GUI slots and slots per page are configurable
+  - AFK protection settings:
+    - `interaction-threshold`: Minimum number of interactions required in the time window
+    - `time-window-minutes`: Time window in minutes to check for interactions
 
 ---
 
@@ -96,10 +130,3 @@ To opt out of statistics collection, set `enabled: false` in the `/plugins/bStat
 
 - 📬 [Open an issue](https://github.com/Souldevhub/PlayTimePulse/issues)
 - 💻 [Discord](https://discord.gg/6SCAZfENjw)
-
----
-
-## 📄 License
-
-Licensed under the GNU General Public License v3.0 (GPLv3)  
-See the [LICENSE](LICENSE) file for details.

@@ -1,31 +1,14 @@
 name: PlayTimePulse
-version: '1.0.2'
-main: com.github.souldevhub.playTimePlugin.PlayTimePlugin
+version: '${project.version}'
+main: com.github.souldevhub.playTimePlugin.PlaytimePulse
 api-version: '1.21'
-authors: [ github.com/souldevhub ]
-description: Playtime tracker + ranks for engagement.
-website: instagram.com/shiawase.re
-dependencies:
-  server:
-    PlaceholderAPI:
-      load: BEFORE #
-      required: false
+author: souldevhub
+description: Track player playtime and reward them for playing
+website: https://github.com/Souldevhub/PlayTimePulse
+softdepend: [PlaceholderAPI]
+
 commands:
   playtime:
-    description: Main command for playtime tracking and management.
-    usage: |-
-      §c/playtime - Shows your playtime and GUI
-      §c/playtime add <player> <hours>h [<minutes>m] - Add playtime to a player
-      §c/playtime reset <player> - Reset player's playtime and claimed rewards
-    aliases: [pt, playrank]
-    permission: playtime.use
-
-permissions:
-  playtime.use:
-    default: true
-    description: Level 1 permission to use playtime commands
-  playtime.admin:
-    default: op
-    description: Level 2 permission for admin commands
-    children:
-      playtime.use: true
+    description: Checks your playtime and open the rewards GUI
+    usage: /playtime
+    aliases: [pt]

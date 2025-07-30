@@ -1,20 +1,27 @@
-package com.github.souldevhub.playTimePlugin.logic;
+package com.github.souldevhub.playTimePlugin.data;
 
-import com.github.souldevhub.playTimePlugin.PlayTimePlugin;
+import com.github.souldevhub.playTimePlugin.PlaytimePulse;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-public class ClaimedRewardsHandler {
-    private final PlayTimePlugin plugin;
+public class ClaimedRewardsDataHandler {
+    
+    private final PlaytimePulse plugin;
     private final File file;
     private final YamlConfiguration config;
     private final Map<UUID, List<String>> claimedCache = new HashMap<>();
 
-    public ClaimedRewardsHandler(PlayTimePlugin plugin) {
+    public ClaimedRewardsDataHandler(PlaytimePulse plugin) {
         this.plugin = plugin;
+        
+        // Initialize claimed rewards systems
         this.file = new File(plugin.getDataFolder(), "claimed_rewards.yml");
         if (!file.exists()) {
             try {
@@ -26,26 +33,16 @@ public class ClaimedRewardsHandler {
             }
         }
         this.config = YamlConfiguration.loadConfiguration(file);
-        loadAll();
+        loadAllClaimedRewards();
     }
-
 
     public List<String> getClaimedRewards(UUID uuid) {
         return claimedCache.getOrDefault(uuid, new ArrayList<>());
     }
 
-    public void addClaimedReward(UUID uuid, String rewardId) {
-        List<String> claimed = claimedCache.computeIfAbsent(uuid, k -> new ArrayList<>());
-        if (!claimed.contains(rewardId)) {
-            claimed.add(rewardId);
-            config.set(uuid.toString(), claimed);
-            saveFile();
-        }
-    }
-
     /**
-     * Resets all claimed rewards for the specified player
-     * @param uuid Player's UUID
+     * Resets all claimed rewards for a player.
+     * @param uuid Player UUID
      */
     public void resetClaimedRewards(UUID uuid) {
         claimedCache.remove(uuid);
@@ -53,7 +50,19 @@ public class ClaimedRewardsHandler {
         saveFile();
     }
 
-    private void loadAll() {
+    
+    /**
+     * Saves claimed rewards for a specific player and updated the cache
+     * @param uuid Player UUID
+     * @param claimed List of claimed rewards
+     */
+    public void saveClaimedRewards(UUID uuid, List<String> claimed) {
+        claimedCache.put(uuid, claimed);
+        config.set(uuid.toString(), claimed);
+        saveFile();
+    }
+
+    private void loadAllClaimedRewards() {
         for (String key : config.getKeys(false)) {
             try {
                 UUID uuid = UUID.fromString(key);
@@ -71,4 +80,3 @@ public class ClaimedRewardsHandler {
         }
     }
 }
-

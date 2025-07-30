@@ -1,7 +1,7 @@
 package com.github.souldevhub.playTimePlugin.placeholders;
 
-import com.github.souldevhub.playTimePlugin.logic.DataHandler;
-import com.github.souldevhub.playTimePlugin.logic.PlaytimeTracker;
+import com.github.souldevhub.playTimePlugin.data.DataHandler;
+import com.github.souldevhub.playTimePlugin.playtime.PlaytimeTracker;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;

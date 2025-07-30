@@ -1,0 +1,6 @@
+# Playtime data file
+# This file stores player playtime data in the format:
+# <UUID>: <seconds>
+
+# Example entry:
+# 55131639-4519-4d1c-9014-520420a5d08b: 3661

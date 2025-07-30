@@ -1,6 +1,6 @@
-package com.github.souldevhub.playTimePlugin.logic;
+package com.github.souldevhub.playTimePlugin.data;
 
-import com.github.souldevhub.playTimePlugin.PlayTimePlugin;
+import com.github.souldevhub.playTimePlugin.PlaytimePulse;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -12,13 +12,13 @@ import java.util.UUID;
 
 public class DataHandler {
 
-    private final PlayTimePlugin plugin;
+    private final PlaytimePulse plugin;
     private final File file;
     private final FileConfiguration config;
 
     private final Map<UUID, Long> playtimeCache = new HashMap<>();
 
-    public DataHandler(PlayTimePlugin plugin){
+    public DataHandler(PlaytimePulse plugin){
         this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), "playtime.yml");
 

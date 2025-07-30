@@ -1,115 +1,520 @@
-  # Sound names can be found here: https://www.digminecraft.com/lists/sound_list_pc.php
-  # All sounds play at standard volume (1.0) and pitch (1.0)
+# Sound names can be found here: https://www.digminecraft.com/lists/sound_list_pc.php
+# All sounds play at standard volume (1.0) and pitch (1.0)
 
-  rewards:
-  - id: squire_rank
-    name: "&7Squire"
+# AFK Protection Settings
+# Players must have at least 'interaction-threshold' meaningful interactions
+# within the last 'time-window-minutes' to be counted as active
+afk-protection:
+  # Minimum number of interactions required in the time window
+  interaction-threshold: 2
+  # Time window in minutes to check for interactions
+  time-window-minutes: 5
+
+# GUI configuration
+gui:
+  # Number of slots in the rewards GUI (must be a multiple of 9, minus 2 rows for navigation)
+  # Valid values: 9, 18, 27, 36, 45, 54
+  slots: 54
+  # Maximum number of rewards per page
+  slots-per-page: 45
+  # Material to fill unused slots with
+  fill-unused-slots: BLACK_STAINED_GLASS_PANE
+  # Navigation buttons configuration
+  navigation:
+    enabled: true
+    prev-page:
+      material: ARROW
+      name: "&b← Previous Page"
+      # Optional: Use a custom head texture for the button
+      # headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODU1MGI3Zjc0ZTllZDc2MzNhYTI3NGVhMzBjYzNkMmU4N2FiYjM2ZDRkMmQ0YzY5ZGI4OWVkMmI5OTVjZTIifX19"
+    next-page:
+      material: ARROW
+      name: "&bNext Page →"
+      # Optional: Use a custom head texture for the button
+      # headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTYzMzlmZjJlNTM0MmJhMThiZGM0OGE5OWNjYTY1ZDEyM2NlNzgxZDg3ODI3MmY5ZDk2NGVhZDNiOGFkMzcwIn19fQ=="
+    close:
+      material: BARRIER
+      name: "&c✖ Close"
+      # Optional: Use a custom head texture for the button
+      # headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmE4OTVhZjRkMTk0ZmEyYjA2N2ZmYTZmZjcyYzgyYjYyNDJiNjA4MWY4YzU2NmYwZWY3NmRhMDNkOTM0In19fQ=="
+
+rewards:
+  level_0:
+    id: level_0
+    name: "&fLevel 0"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODgyZmFmOWE1ODRjNGQ2NzZkNzMwYjIzZjg5NDJiYjk5N2ZhM2RhZDQ2ZDRmNjVlMjg4YzM5ZWI0NzFjZTcifX19"
+    slot: 0
+    page: 0
+    claimSound: entity.experience_orb.pickup
+    lore:
+      - '&7Playtime Milestone: &f0 minutes'
+      - '&7Reward for joining the adventure.'
+    requiredPlaytime: 1800
+    commands:
+      - say %player% has claimed the Level 0 reward!
+      - title %player% title {"text":"Level 0","color":"white","bold":true}
+      - title %player% subtitle {"text":"The journey begins.","color":"gray","italic":true}
+      - give %player% bread 16
+      - xp add %player% 100 points
+
+  level_1:
+    id: level_1
+    name: "&fLevel 1"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWQwZjE1OTllNzU0OTU0Y2QxMTA2YTA4Njk3ODZjNjY3MTMzYTljYmNlNzEwZjRhNjQzMzJmYjNlZmVlNTRmNiJ9fX0="
+    slot: 9
+    page: 0
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Playtime Milestone: &f15 minutes'
+      - "&7You're getting the hang of this."
+    requiredPlaytime: 3600
+    commands:
+      - say %player% has reached Level 1!
+      - title %player% title {"text":"Level 1","color":"gray","bold":true}
+      - title %player% subtitle {"text":"Keep going!","color":"dark_gray","italic":true}
+      - give %player% iron_pickaxe 1
+      - give %player% torch 32
+      - xp add %player% 150 points
+
+  level_2:
+    id: level_2
+    name: "&fLevel 2"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWQwZjE1OTllNzU0OTU0Y2QxMTA2YTA4Njk3ODZjNjY3MTMzYTljYmNlNzEwZjRhNjQzMzJmYjNlZmVlNTRmNiJ9fX0="
+    slot: 18
+    page: 0
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Playtime Milestone: &f30 minutes'
+      - '&7You are progressing steadily.'
+    requiredPlaytime: 7200
+    commands:
+      - say %player% has reached Level 2!
+      - title %player% title {"text":"Level 2","color":"gray","bold":true}
+      - title %player% subtitle {"text":"The road ahead is long.","color":"dark_gray","italic":true}
+      - give %player% iron_sword 1
+      - give %player% cooked_beef 8
+      - xp add %player% 200 points
+
+  level_3:
+    id: level_3
+    name: "&fLevel 3"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWQwZjE1OTllNzU0OTU0Y2QxMTA2YTA4Njk3ODZjNjY3MTMzYTljYmNlNzEwZjRhNjQzMzJmYjNlZmVlNTRmNiJ9fX0="
+    slot: 27
+    page: 0
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Playtime Milestone: &f1 hour'
+      - '&7Your journey is just beginning.'
+    requiredPlaytime: 12600
+    commands:
+      - say %player% has reached Level 3!
+      - title %player% title {"text":"Level 3","color":"gold","bold":true}
+      - title %player% subtitle {"text":"You're gaining strength.","color":"yellow","italic":true}
+      - give %player% iron_helmet 1
+      - give %player% iron_chestplate 1
+      - xp add %player% 300 points
+
+  squire:
+    id: squire
+    name: "&2Squire"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWE0NzlmNmY1MjIyZjQ0N2U4ZmU4ODRlY2FjNmE5NWY5MjY4ZDA3Y2I0OTMxNmIwODIzOWUyYjVmNTdkNDgxMCJ9fX0="
+    slot: 28
+    page: 0
+    claimSound: item.goat_horn.sound.0
+    lore:
+      - '&7Unlocked a new rank: &2Squire'
+      - '&7Step by step, you grow.'
+    requiredPlaytime: 18000
+    commands:
+      - say %player% has unlocked the Squire rank!
+      - title %player% title {"text":"Squire","color":"gray","bold":true}
+      - title %player% subtitle {"text":"Step by step, you grow.","color":"dark_gray","italic":true}
+      - give %player% iron_leggings 1
+      - give %player% iron_boots 1
+      - give %player% golden_apple 1
+      - xp add %player% 400 points
+
+  level_4:
+    id: level_4
+    name: "&2Level 4"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGM2YmFjZDM2ZWQ2MGY1MzMxMzhlNzU5YzQyNTk0NjIyMmI3OGVkYTZiNjE2MjE2ZjZkY2MwOGU5MGQzM2UifX19"
+    slot: 29
+    page: 0
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Playtime Milestone: &f6 hours'
+      - '&7You grow more confident.'
+    requiredPlaytime: 21600
+    commands:
+      - say %player% has reached Level 4!
+      - title %player% title {"text":"Level 4","color":"gray","bold":true}
+      - title %player% subtitle {"text":"Confidence is building.","color":"dark_gray","italic":true}
+      - give %player% diamond 3
+      - give %player% cooked_porkchop 16
+      - xp add %player% 500 points
+
+  level_5:
+    id: level_5
+    name: "&2Level 5"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGM2YmFjZDM2ZWQ2MGY1MzMxMzhlNzU5YzQyNTk0NjIyMmI3OGVkYTZiNjE2MjE2ZjZkY2MwOGU5MGQzM2UifX19"
+    slot: 20
+    page: 0
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Playtime Milestone: &f7 hours'
+      - '&7Your presence is felt.'
+    requiredPlaytime: 25200
+    commands:
+      - say %player% has reached Level 5!
+      - title %player% title {"text":"Level 5","color":"gray","bold":true}
+      - title %player% subtitle {"text":"You’re making your mark.","color":"dark_gray","italic":true}
+      - give %player% diamond_pickaxe 1
+      - give %player% diamond_sword 1
+      - xp add %player% 600 points
+
+  level_6:
+    id: level_6
+    name: "&2Level 6"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGM2YmFjZDM2ZWQ2MGY1MzMxMzhlNzU5YzQyNTk0NjIyMmI3OGVkYTZiNjE2MjE2ZjZkY2MwOGU5MGQzM2UifX19"
+    slot: 11
+    page: 0
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Playtime Milestone: &f9 hours'
+      - '&7Mastery takes time.'
+    requiredPlaytime: 32400
+    commands:
+      - say %player% has reached Level 6!
+      - title %player% title {"text":"Level 6","color":"gray","bold":true}
+      - title %player% subtitle {"text":"Precision. Patience.","color":"dark_gray","italic":true}
+      - give %player% diamond_helmet 1
+      - give %player% diamond_chestplate 1
+      - xp add %player% 700 points
+
+  level_7:
+    id: level_7
+    name: "&2Level 7"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGM2YmFjZDM2ZWQ2MGY1MzMxMzhlNzU5YzQyNTk0NjIyMmI3OGVkYTZiNjE2MjE2ZjZkY2MwOGU5MGQzM2UifX19"
+    slot: 2
+    page: 0
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Playtime Milestone: &f12 hours'
+      - '&7You’re a force to be reckoned with.'
+    requiredPlaytime: 43200
+    commands:
+      - say %player% has reached Level 7!
+      - title %player% title {"text":"Level 7","color":"gray","bold":true}
+      - title %player% subtitle {"text":"Unstoppable.","color":"dark_gray","italic":true}
+      - give %player% diamond_leggings 1
+      - give %player% diamond_boots 1
+      - give %player% ender_pearl 3
+      - xp add %player% 800 points
+
+  adept:
+    id: adept
+    name: "&aAdept"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmRmMjFjZjY2OWM1NTY1Njc5ODMzMjI1YzNkZDhjMjIwNTlmOTI5YzNlYjMxY2EzNGU4ODhkMWJiNzE4MzBkMCJ9fX0="
+    slot: 3
+    page: 0
+    claimSound: item.goat_horn.sound.0
+    lore:
+      - '&7Unlocked a new rank: &aAdept'
+      - '&7Your skill is recognized.'
+    requiredPlaytime: 50400
+    commands:
+      - say %player% has unlocked the Adept rank!
+      - title %player% title {"text":"Adept","color":"aqua","bold":true}
+      - title %player% subtitle {"text":"Your skill is recognized.","color":"dark_aqua","italic":true}
+      - give %player% diamond 16
+      - give %player% golden_apple 2
+      - xp add %player% 1000 points
+
+  level_8:
+    id: level_8
+    name: "&aLevel 8"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjQxNDQ5MDk3YjRiNzlhOWY2Y2FmNjM0NDQxOGYyMDM0ZGU0YmI5NzFmZWI3YThlNGFhY2JmYjkwNWFjZGNlZiJ9fX0="
+    slot: 4
+    page: 0
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Playtime Milestone: &f16 hours'
+      - '&7You sharpen your skills.'
+    requiredPlaytime: 57600   # 16h
+    commands:
+      - say %player% has reached Level 8!
+      - title %player% title {"text":"Level 8","color":"gray","bold":true}
+      - title %player% subtitle {"text":"You sharpen your skills.","color":"dark_gray","italic":true}
+      - give %player% diamond 8
+      - give %player% experience_bottle 16
+      - xp add %player% 1200 points
+
+  level_9:
+    id: level_9
+    name: "&aLevel 9"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjQxNDQ5MDk3YjRiNzlhOWY2Y2FmNjM0NDQxOGYyMDM0ZGU0YmI5NzFmZWI3YThlNGFhY2JmYjkwNWFjZGNlZiJ9fX0="
+    slot: 13
+    page: 0
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Playtime Milestone: &f18 hours'
+      - '&7Steadily advancing.'
+    requiredPlaytime: 64800   # 18h
+    commands:
+      - say %player% has reached Level 9!
+      - title %player% title {"text":"Level 9","color":"gray","bold":true}
+      - title %player% subtitle {"text":"Steadily advancing.","color":"dark_gray","italic":true}
+      - give %player% emerald 16
+      - give %player% ender_pearl 8
+      - xp add %player% 1400 points
+
+  level_10:
+    id: level_10
+    name: "&aLevel 10"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjQxNDQ5MDk3YjRiNzlhOWY2Y2FmNjM0NDQxOGYyMDM0ZGU0YmI5NzFmZWI3YThlNGFhY2JmYjkwNWFjZGNlZiJ9fX0="
+    slot: 22
+    page: 0
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Playtime Milestone: &f20 hours'
+      - '&7Your power grows.'
+    requiredPlaytime: 72000   # 20h
+    commands:
+      - say %player% has reached Level 10!
+      - title %player% title {"text":"Level 10","color":"gray","bold":true}
+      - title %player% subtitle {"text":"Your power grows.","color":"dark_gray","italic":true}
+      - give %player% diamond 12
+      - give %player% golden_apple 3
+      - xp add %player% 1600 points
+
+  level_11:
+    id: level_11
+    name: "&aLevel 11"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjQxNDQ5MDk3YjRiNzlhOWY2Y2FmNjM0NDQxOGYyMDM0ZGU0YmI5NzFmZWI3YThlNGFhY2JmYjkwNWFjZGNlZiJ9fX0="
+    slot: 31
+    page: 0
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Playtime Milestone: &f22 hours'
+      - '&7A true veteran.'
+    requiredPlaytime: 79200   # 22h
+    commands:
+      - say %player% has reached Level 11!
+      - title %player% title {"text":"Level 11","color":"gray","bold":true}
+      - title %player% subtitle {"text":"A true veteran.","color":"dark_gray","italic":true}
+      - give %player% experience_bottle 32
+      - xp add %player% 1800 points
+
+  knight:
+    id: knight
+    name: "&9Knight"
     material: PLAYER_HEAD
     headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTg0ZjE3ODEwNWJjOTFlYjZhZTMyODg3OWYxY2Y4OTAyYzIzNjA2MTY5OGZlNWEwZmUyYzUxMjQ2MzQ0MDRiMyJ9fX0="
-    slot: 10
-    # Sound played when claiming this reward
-    claimSound: ITEM.GOAT_HORN.SOUND.0
+    slot: 32
+    page: 0
+    claimSound: item.goat_horn.sound.0
     lore:
-      - "&7The journey begins."
-      - "&7You are but a humble squire."
-      - ""
-      - "&7Learn the ways of the realm."
-      - "&7Earn your place among the knights."
-    requiredPlaytime: 1800 # 30 minutes
+      - '&7Unlocked a new rank: &9Knight'
+      - '&7Your valor is recognized.'
+    requiredPlaytime: 86400   # 24h
     commands:
-      - "give %player% iron_sword 1"
-      - "give %player% bread 10"
-      - "give %player% iron_ingot 5"
-      - "say %player% has become a Squire!"
-      - 'title %player% title {"text":"Squire","color":"gray","bold":true}'
-      - 'title %player% subtitle {"text":"The story begins...","color":"dark_gray","italic":true}'
+      - say %player% has unlocked the Knight rank!
+      - title %player% title {"text":"Knight","color":"blue","bold":true}
+      - title %player% subtitle {"text":"Your valor is recognized.","color":"dark_blue","italic":true}
+      - give %player% diamond 24
+      - give %player% golden_apple 4
+      - xp add %player% 2000 points
 
-  - id: knight_rank
-    name: "&fKnight"
+  level_12:
+    id: level_12
+    name: "&9Level 12"
     material: PLAYER_HEAD
-    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWEzZTFhMDUwZmZkYWUyY2YzNDJmZTM4YzYxZWJhYzdlMDZhYzU4Y2UxYTYwMDNmZTIzZWE4YWU0YjU4YzYwOCJ9fX0="
-    slot: 12
-    claimSound: block.anvil.place
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzc4YTc5ZTFkNmJlN2JkZjA5ZWUwZTgwNTk1OTU3NzU1MjExYTE5ZDBkYTE2MWI3OGJhNjY5MDc5ZTA5YTkwOSJ9fX0="
+    slot: 33
+    page: 0
+    claimSound: entity.player.levelup
     lore:
-      - "&fA sworn protector of the land."
-      - "&fYour valor has been proven."
-      - ""
-      - "&fDefend the weak."
-      - "&fFight with honor."
-    requiredPlaytime: 7200 # 2 hours
+      - '&7Playtime Milestone: &f26 hours'
+      - '&7Stronger than ever.'
+    requiredPlaytime: 93600   # 26h
     commands:
-      - "give %player% iron_chestplate 1"
-      - "give %player% shield 1"
-      - "give %player% iron_ingot 10"
-      - "give %player% cooked_beef 10"
-      - "say %player% is now a brave Knight!"
-      - 'title %player% title {"text":"Knight","color":"white","bold":true}'
-      - 'title %player% subtitle {"text":"Honor and steel guide your path.","color":"gray","italic":true}'
+      - say %player% has reached Level 12!
+      - title %player% title {"text":"Level 12","color":"gray","bold":true}
+      - title %player% subtitle {"text":"Stronger than ever.","color":"dark_gray","italic":true}
+      - give %player% ender_pearl 32
+      - give %player% diamond 12
+      - xp add %player% 2200 points
 
-  - id: paladin_rank
-    name: "&ePaladin"
+  level_13:
+    id: level_13
+    name: "&9Level 13"
     material: PLAYER_HEAD
-    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDEzZTM5ODkwYjE2NjhiYTdiYmY2MTY4MWI4MDM5Njg1ODVkOTNiM2E5OTQ0ZDlkYzhiYThmMTcwMGExMDkyYiJ9fX0="
-    slot: 14
-    claimSound: ENTITY.EVOKER.PREPARE_SUMMON
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzc4YTc5ZTFkNmJlN2JkZjA5ZWUwZTgwNTk1OTU3NzU1MjExYTE5ZDBkYTE2MWI3OGJhNjY5MDc5ZTA5YTkwOSJ9fX0="
+    slot: 24
+    page: 0
+    claimSound: entity.player.levelup
     lore:
-      - "&eA champion of light."
-      - "&eYour deeds inspire the realm."
-      - ""
-      - "&eLet your faith be your shield."
-      - "&eBring justice with every strike."
-    requiredPlaytime: 21600 # 6 hours
+      - '&7Playtime Milestone: &f28 hours'
+      - '&7Battle-hardened.'
+    requiredPlaytime: 100800  # 28h
     commands:
-      - "give %player% golden_sword 1"
-      - "give %player% golden_apple 3"
-      - "give %player% gold_ingot 12"
-      - "give %player% emerald 5"
-      - "say %player% has earned the title of Paladin!"
-      - 'title %player% title {"text":"Paladin","color":"yellow","bold":true}'
-      - 'title %player% subtitle {"text":"Faith is your weapon. Light is your shield.","color":"gold","italic":true}'
+      - say %player% has reached Level 13!
+      - title %player% title {"text":"Level 13","color":"gray","bold":true}
+      - title %player% subtitle {"text":"Battle-hardened.","color":"dark_gray","italic":true}
+      - give %player% diamond 24
+      - give %player% golden_apple 4
+      - xp add %player% 2400 points
 
-
-  - id: warlock_rank
-    name: "&5Warlock"
+  level_14:
+    id: level_14
+    name: "&9Level 14"
     material: PLAYER_HEAD
-    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGUyMmM1MmU5N2Q5YmE3YmUyMmUwNDdiZWQzYTNkYmM5ODBjNzExNDA0YWQ3ODZlNGI5YWQyMjFhZjczNDVmOSJ9fX0="
-    slot: 16
-    claimSound: ENTITY.LIGHTNING_BOLT.THUNDER
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzc4YTc5ZTFkNmJlN2JkZjA5ZWUwZTgwNTk1OTU3NzU1MjExYTE5ZDBkYTE2MWI3OGJhNjY5MDc5ZTA5YTkwOSJ9fX0="
+    slot: 15
+    page: 0
+    claimSound: entity.player.levelup
     lore:
-      - "&5Master of arcane secrets."
-      - "&5You delve into forbidden magic."
-      - ""
-      - "&5Wield your power wisely."
-      - "&5Knowledge is your true weapon."
-    requiredPlaytime: 43200 # 12 hours
+      - '&7Playtime Milestone: &f30 hours'
+      - '&7Ready for any challenge.'
+    requiredPlaytime: 108000  # 30h
     commands:
-      - "give %player% ender_pearl 5"
-      - "give %player% experience_bottle 10"
-      - "give %player% blaze_powder 6"
-      - "give %player% redstone 16"
-      - "say %player% has unlocked the dark arts as a Warlock!"
-      - 'title %player% title {"text":"Warlock","color":"dark_purple","bold":true}'
-      - 'title %player% subtitle {"text":"The arcane whispers your name.","color":"light_purple","italic":true}'
+      - say %player% has reached Level 14!
+      - title %player% title {"text":"Level 14","color":"gray","bold":true}
+      - title %player% subtitle {"text":"Ready for any challenge.","color":"dark_gray","italic":true}
+      - give %player% golden_apple 8
+      - give %player% diamond 16
+      - xp add %player% 2600 points
 
-
-  - id: dragonlord_rank
-    name: "&cDragonlord"
-    material: DRAGON_EGG
-    headId:
-    slot: 22
-    claimSound: ENTITY.ENDER_DRAGON.GROWL
+  level_15:
+    id: level_15
+    name: "&9Level 15"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzc4YTc5ZTFkNmJlN2JkZjA5ZWUwZTgwNTk1OTU3NzU1MjExYTE5ZDBkYTE2MWI3OGJhNjY5MDc5ZTA5YTkwOSJ9fX0="
+    slot: 6
+    page: 0
+    claimSound: entity.player.levelup
     lore:
-      - "&cRuler of flame and sky."
-      - "&cYour legend echoes through time."
-      - ""
-      - "&cFew dare challenge your might."
-      - "&cCommand dragons and destiny alike."
-    requiredPlaytime: 86400 # 24 hours
+      - '&7Playtime Milestone: &f32 hours'
+      - '&7A true defender.'
+    requiredPlaytime: 115200  # 32h
     commands:
-      - "give %player% dragon_head 1"
-      - "give %player% fire_charge 10"
-      - "give %player% diamond 5"
-      - "give %player% netherite_ingot 10"
-      - "say %player% has become the mighty Dragonlord!"
-      - 'title %player% title {"text":"Dragonlord","color":"red","bold":true}'
-      - 'title %player% subtitle {"text":"Rule the skies. Command your legend.","color":"dark_red","italic":true}'
+      - say %player% has reached Level 15!
+      - title %player% title {"text":"Level 15","color":"gray","bold":true}
+      - title %player% subtitle {"text":"A true defender.","color":"dark_gray","italic":true}
+      - give %player% experience_bottle 128
+      - give %player% diamond 20
+      - xp add %player% 2800 points
+
+  defender:
+    id: defender
+    name: "&bDefender"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzRjNzJjZTk0NTg2Y2I3NDBiMmFiNTE0MTFhZjE1MjM1OTEyYjc0ZWU2NzU2MjliYmY4YzhlYTY5ZDQ1MTUzNiJ9fX0="
+    slot: 7
+    page: 0
+    claimSound: item.goat_horn.sound.0
+    lore:
+      - '&7Unlocked a new rank: &bDefender'
+      - '&7Protector of the realm.'
+    requiredPlaytime: 122400  # 34h
+    commands:
+      - say %player% has unlocked the Defender rank!
+      - title %player% title {"text":"Defender","color":"dark_green","bold":true}
+      - title %player% subtitle {"text":"Protector of the realm.","color":"green","italic":true}
+      - give %player% diamond 32
+      - give %player% golden_apple 8
+      - xp add %player% 3000 points
+
+  level_16:
+    id: level_16
+    name: "&bLevel 16"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTYxYjk4ZDg5MzQ5MDBhMDhhYjdjMGQ2MGYzNDc2YzU2OWJmN2ZmNjM3MTk2ZGNlNjQ0ZThjYzRiN2JhMzI1YSJ9fX0="
+    slot: 8
+    page: 0
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Playtime Milestone: &f36 hours'
+      - '&7Master of many trades.'
+    requiredPlaytime: 129600  # 36h
+    commands:
+      - say %player% has reached Level 16!
+      - title %player% title {"text":"Level 16","color":"gray","bold":true}
+      - title %player% subtitle {"text":"Master of many trades.","color":"dark_gray","italic":true}
+      - give %player% ender_pearl 64
+      - xp add %player% 3200 points
+
+  level_17:
+    id: level_17
+    name: "&bLevel 17"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTYxYjk4ZDg5MzQ5MDBhMDhhYjdjMGQ2MGYzNDc2YzU2OWJmN2ZmNjM3MTk2ZGNlNjQ0ZThjYzRiN2JhMzI1YSJ9fX0="
+    slot: 17
+    page: 0
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Playtime Milestone: &f38 hours'
+      - '&7Diligence pays off.'
+    requiredPlaytime: 136800  # 38h
+    commands:
+      - say %player% has reached Level 17!
+      - title %player% title {"text":"Level 17","color":"gray","bold":true}
+      - title %player% subtitle {"text":"Diligence pays off.","color":"dark_gray","italic":true}
+      - give %player% experience_bottle 128
+      - give %player% diamond 28
+      - xp add %player% 3400 points
+
+  level_18:
+    id: level_18
+    name: "&bLevel 18"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTYxYjk4ZDg5MzQ5MDBhMDhhYjdjMGQ2MGYzNDc2YzU2OWJmN2ZmNjM3MTk2ZGNlNjQ0ZThjYzRiN2JhMzI1YSJ9fX0="
+    slot: 26
+    page: 0
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Playtime Milestone: &f40 hours'
+      - '&7A seasoned adventurer.'
+    requiredPlaytime: 144000  # 40h
+    commands:
+      - say %player% has reached Level 18!
+      - title %player% title {"text":"Level 18","color":"gray","bold":true}
+      - title %player% subtitle {"text":"A seasoned adventurer.","color":"dark_gray","italic":true}
+      - give %player% diamond 48
+      - give %player% golden_apple 8
+      - xp add %player% 3600 points
+
+  level_19:
+    id: level_19
+    name: "&bLevel 19"
+    material: PLAYER_HEAD
+    headId: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTU2YTM2MTg0NTllNDNiMjg3YjIyYjdlMjM1ZWM2OTk1OTQ1NDZjNmZjZDZkYzg0YmZjYTRjZjMwYWI5MzExIn19fQ=="
+    slot: 35
+    page:
+    claimSound: music_disc.cat
+    lore:
+      - '&7Playtime Milestone: &f45 hours'
+      - '&7Time for a new page?'
+    requiredPlaytime: 162000
+    commands:
+      - say %player% has reached Level 19!
+      - title %player% title {"text":"Level 19","color":"aqua","bold":true}
+      - title %player% subtitle {"text":"Time for a new page?","color":"dark_aqua","italic":true}
+      - give %player% netherite_scrap 4
+      - give %player% golden_apple 16
+      - give %player% experience_bottle 64
+      - xp add %player% 4000 points

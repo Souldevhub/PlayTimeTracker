@@ -1,7 +1,9 @@
-package com.github.souldevhub.playTimePlugin.logic;
+package com.github.souldevhub.playTimePlugin.commands;
 
-import com.github.souldevhub.playTimePlugin.PlayTimePlugin;
-import com.github.souldevhub.playTimePlugin.RewardsGUI;
+import com.github.souldevhub.playTimePlugin.PlaytimePulse;
+import com.github.souldevhub.playTimePlugin.data.DataHandler;
+import com.github.souldevhub.playTimePlugin.playtime.PlaytimeTracker;
+import com.github.souldevhub.playTimePlugin.rewards.gui.RewardsGUI;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -10,10 +12,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
@@ -22,28 +20,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class PlaytimeListener implements Listener, CommandExecutor, TabCompleter {
+public class PlaytimeCommand implements CommandExecutor, TabCompleter {
 
     private final PlaytimeTracker tracker;
-    private final PlayTimePlugin plugin;
+    private final PlaytimePulse plugin;
     private final DataHandler dataHandler;
 
-    public PlaytimeListener(PlaytimeTracker tracker, PlayTimePlugin plugin) {
+    public PlaytimeCommand(PlaytimeTracker tracker, PlaytimePulse plugin) {
         this.tracker = tracker;
         this.plugin = plugin;
         this.dataHandler = plugin.getDataHandler();
-    }
-
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        UUID uuid = e.getPlayer().getUniqueId();
-        tracker.onPlayerJoin(uuid);
-    }
-
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        UUID uuid = e.getPlayer().getUniqueId();
-        tracker.onPlayerQuit(uuid);
     }
 
     @Override
@@ -60,9 +46,9 @@ public class PlaytimeListener implements Listener, CommandExecutor, TabCompleter
                 return null; // Return null to show all online players
             }
         } else if (args.length == 3 && args[0].equalsIgnoreCase("add") && sender.hasPermission("playtime.admin")) {
-            completions.add("1h"); // Example format
-                    } else if (args.length == 4 && args[0].equalsIgnoreCase("add") && sender.hasPermission("playtime.admin")) {
-            completions.add("30m"); // Example format
+            completions.add("1h");
+        } else if (args.length == 4 && args[0].equalsIgnoreCase("add") && sender.hasPermission("playtime.admin")) {
+            completions.add("30m");
         }
 
         return completions;
@@ -118,7 +104,7 @@ public class PlaytimeListener implements Listener, CommandExecutor, TabCompleter
         // Open GUI after a short delay (5 ticks = 0.25 seconds)
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             player.sendMessage(Component.text("Opening rewards menu...", NamedTextColor.GRAY));
-            RewardsGUI.open(player, tracker, plugin.getClaimedRewardsHandler());
+            RewardsGUI.open(player, tracker, plugin.getRewardsGUIListener());
             player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 0.5f, 1.0f);
         }, 5L);
     }
@@ -195,7 +181,7 @@ public class PlaytimeListener implements Listener, CommandExecutor, TabCompleter
         dataHandler.addPlaytime(targetUUID, -dataHandler.getPlaytime(targetUUID)); // Set to 0
         dataHandler.savePlaytime(targetUUID);
 
-        plugin.getClaimedRewardsHandler().resetClaimedRewards(targetUUID);
+        plugin.getRewardsGUIListener().resetClaimedRewards(targetUUID);
 
         Component successMessage = Component.text()
                 .append(Component.text("Reset playtime for ", NamedTextColor.GREEN))
