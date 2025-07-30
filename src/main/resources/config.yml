@@ -48,7 +48,7 @@ rewards:
     page: 0
     claimSound: entity.experience_orb.pickup
     lore:
-      - '&7Playtime Milestone: &f0 minutes'
+      - '&7Your first step into the world.'
       - '&7Reward for joining the adventure.'
     requiredPlaytime: 1800
     commands:
@@ -67,7 +67,7 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f15 minutes'
+      - '&7Beginning to find your footing.'
       - "&7You're getting the hang of this."
     requiredPlaytime: 3600
     commands:
@@ -87,7 +87,7 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f30 minutes'
+      - '&7Settling in nicely.'
       - '&7You are progressing steadily.'
     requiredPlaytime: 7200
     commands:
@@ -107,8 +107,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f1 hour'
       - '&7Your journey is just beginning.'
+      - '&7Gaining strength and experience.'
     requiredPlaytime: 12600
     commands:
       - say %player% has reached Level 3!
@@ -148,8 +148,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f6 hours'
-      - '&7You grow more confident.'
+      - '&7Growing more confident.'
+      - '&7Your skills are improving.'
     requiredPlaytime: 21600
     commands:
       - say %player% has reached Level 4!
@@ -168,8 +168,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f7 hours'
       - '&7Your presence is felt.'
+      - '&7Making your mark in the world.'
     requiredPlaytime: 25200
     commands:
       - say %player% has reached Level 5!
@@ -188,8 +188,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f9 hours'
       - '&7Mastery takes time.'
+      - '&7Precision and patience are key.'
     requiredPlaytime: 32400
     commands:
       - say %player% has reached Level 6!
@@ -208,8 +208,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f12 hours'
       - '&7You’re a force to be reckoned with.'
+      - '&7Becoming unstoppable.'
     requiredPlaytime: 43200
     commands:
       - say %player% has reached Level 7!
@@ -249,8 +249,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f16 hours'
-      - '&7You sharpen your skills.'
+      - '&7Sharpening your skills.'
+      - '&7Experience flows through you.'
     requiredPlaytime: 57600   # 16h
     commands:
       - say %player% has reached Level 8!
@@ -269,8 +269,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f18 hours'
       - '&7Steadily advancing.'
+      - '&7Power grows within you.'
     requiredPlaytime: 64800   # 18h
     commands:
       - say %player% has reached Level 9!
@@ -289,8 +289,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f20 hours'
       - '&7Your power grows.'
+      - '&7Strength flows through you.'
     requiredPlaytime: 72000   # 20h
     commands:
       - say %player% has reached Level 10!
@@ -309,8 +309,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f22 hours'
       - '&7A true veteran.'
+      - '&7Experience is your ally.'
     requiredPlaytime: 79200   # 22h
     commands:
       - say %player% has reached Level 11!
@@ -348,8 +348,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f26 hours'
       - '&7Stronger than ever.'
+      - '&7Your legend grows.'
     requiredPlaytime: 93600   # 26h
     commands:
       - say %player% has reached Level 12!
@@ -368,8 +368,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f28 hours'
       - '&7Battle-hardened.'
+      - '&7You have seen much.'
     requiredPlaytime: 100800  # 28h
     commands:
       - say %player% has reached Level 13!
@@ -388,8 +388,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f30 hours'
       - '&7Ready for any challenge.'
+      - '&7Nothing can stop you now.'
     requiredPlaytime: 108000  # 30h
     commands:
       - say %player% has reached Level 14!
@@ -408,8 +408,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f32 hours'
       - '&7A true defender.'
+      - '&7Protector of the realm.'
     requiredPlaytime: 115200  # 32h
     commands:
       - say %player% has reached Level 15!
@@ -448,8 +448,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f36 hours'
       - '&7Master of many trades.'
+      - '&7Knowledge is your strength.'
     requiredPlaytime: 129600  # 36h
     commands:
       - say %player% has reached Level 16!
@@ -467,8 +467,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f38 hours'
       - '&7Diligence pays off.'
+      - '&7Persistence leads to greatness.'
     requiredPlaytime: 136800  # 38h
     commands:
       - say %player% has reached Level 17!
@@ -487,8 +487,8 @@ rewards:
     page: 0
     claimSound: entity.player.levelup
     lore:
-      - '&7Playtime Milestone: &f40 hours'
       - '&7A seasoned adventurer.'
+      - '&7Your journey has made you wise.'
     requiredPlaytime: 144000  # 40h
     commands:
       - say %player% has reached Level 18!
@@ -507,8 +507,8 @@ rewards:
     page:
     claimSound: music_disc.cat
     lore:
-      - '&7Playtime Milestone: &f45 hours'
       - '&7Time for a new page?'
+      - '&7Your legend continues to grow.'
     requiredPlaytime: 162000
     commands:
       - say %player% has reached Level 19!
