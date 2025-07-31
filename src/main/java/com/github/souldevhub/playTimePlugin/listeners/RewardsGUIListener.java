@@ -41,8 +41,10 @@ public class RewardsGUIListener implements Listener {
     @EventHandler(priority = org.bukkit.event.EventPriority.HIGHEST)
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
-        if (!(event.getView().getTopInventory().getHolder() instanceof RewardsGUI.RewardsGUIHolder)) {
-            plugin.getLogger().info("Clicked inventory is not RewardsGUIHolder, ignoring");
+
+        // Check clicked inventory specifically (more precise)
+        if (event.getClickedInventory() == null ||
+                !(event.getClickedInventory().getHolder() instanceof RewardsGUI.RewardsGUIHolder)) {
             return;
         }
 
@@ -200,7 +202,7 @@ public class RewardsGUIListener implements Listener {
     @EventHandler(priority = org.bukkit.event.EventPriority.HIGHEST)
     public void onInventoryDrag(InventoryDragEvent event) {
         if (event.getView().getTopInventory().getHolder() instanceof RewardsGUI.RewardsGUIHolder) {
-            plugin.getLogger().info("Inventory drag detected in RewardsGUIHolder, cancelling");
+            // 移除日志记录，只取消事件
             event.setCancelled(true);
         }
     }
