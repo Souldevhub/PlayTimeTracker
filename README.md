@@ -34,6 +34,7 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
   - Pagination support for large numbers of rewards
   - Customizable slots per page
   - Navigation buttons for moving between pages
+  - "More Rewards Coming Soon" item displayed on last page
 - 🧭 Navigation System:
   - Previous/Next page buttons
   - Close button to exit the GUI
@@ -43,6 +44,10 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
   - Prevents AFK farming of playtime
   - Configurable interaction threshold and time window
   - Tracks meaningful player interactions to validate activity
+- ⚠️ Configuration Validation:
+  - Detailed error logging for misconfigured rewards
+  - Detection and warning of nested reward configurations (indentation errors)
+  - Slot conflict detection for rewards on the same page
 - 🔌 Full PlaceholderAPI support
 - 📊 bStats integration for anonymous usage statistics
 - 📁 Flat-file storage with autosave
@@ -94,6 +99,10 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
   - AFK protection settings:
     - `interaction-threshold`: Minimum number of interactions required in the time window
     - `time-window-minutes`: Time window in minutes to check for interactions
+  - Configuration validation:
+    - Automatic detection of nested reward configurations (indentation errors)
+    - Helpful warning messages for fixing configuration issues
+    - Slot conflict detection to prevent rewards from overlapping
 
 ---
 
