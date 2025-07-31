@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class PlaytimeConfig {
     private static PlaytimeConfig instance;
@@ -74,23 +75,60 @@ public class PlaytimeConfig {
             // 修复潜在的NullPointerException
             var rewardsSection = config.getConfigurationSection("rewards");
             if (rewardsSection != null) {
+                int loadedRewards = 0;
+                int failedRewards = 0;
+                
                 for (String key : rewardsSection.getKeys(false)) {
                     try {
                         // 修复潜在的NullPointerException
                         var rewardSection = config.getConfigurationSection("rewards." + key);
                         if (rewardSection != null) {
+                            // Check if this section has nested reward sections (indentation error)
+                            boolean hasNestedRewards = false;
+                            for (String subKey : rewardSection.getKeys(false)) {
+                                if (config.isConfigurationSection("rewards." + key + "." + subKey)) {
+                                    // This indicates a nested reward - likely an indentation error
+                                    hasNestedRewards = true;
+                                    plugin.getLogger().warning("Possible indentation error in reward '" + key + 
+                                        "': Found nested section '" + subKey + 
+                                        "'. Check if this should be a separate reward.");
+                                }
+                            }
+                            
                             Map<String, Object> rewardData = rewardSection.getValues(true);
                             RewardSlot reward = RewardSlot.fromMap(rewardData);
                             if (reward != null) {
                                 rewardSlots.add(reward);
+                                loadedRewards++;
                             } else {
-                                plugin.getLogger().warning("Failed to load reward with id: " + key);
+                                plugin.getLogger().warning("Failed to load reward with id: " + key + 
+                                    " - Check for missing required fields or incorrect data types");
+                                failedRewards++;
                             }
                         } else {
                             plugin.getLogger().warning("Failed to load reward section with id: " + key);
+                            failedRewards++;
                         }
                     } catch (Exception e) {
-                        plugin.getLogger().warning("Failed to load reward with id: " + key);
+                        plugin.getLogger().warning("Failed to load reward with id: " + key + " - " + e.getMessage());
+                        failedRewards++;
+                    }
+                }
+                
+                plugin.getLogger().info("Reward loading complete: " + loadedRewards + " loaded, " + failedRewards + " failed");
+                
+                // Additional validation - check for duplicate slots on the same page
+                Map<String, List<RewardSlot>> rewardsByPage = rewardSlots.stream()
+                    .collect(Collectors.groupingBy(r -> r.page() + ":" + r.slot()));
+                
+                for (Map.Entry<String, List<RewardSlot>> entry : rewardsByPage.entrySet()) {
+                    if (entry.getValue().size() > 1) {
+                        String[] parts = entry.getKey().split(":");
+                        plugin.getLogger().warning("Slot conflict detected: Page " + parts[0] + 
+                            ", Slot " + parts[1] + " is used by " + entry.getValue().size() + " rewards:");
+                        for (RewardSlot reward : entry.getValue()) {
+                            plugin.getLogger().warning("  - " + reward.id());
+                        }
                     }
                 }
             }
@@ -101,6 +139,18 @@ public class PlaytimeConfig {
 
     public List<RewardSlot> getRewardSlots() {
         return Collections.unmodifiableList(rewardSlots);
+    }
+
+    /**
+     * Calculate the total number of pages needed based on rewards
+     * @return The total number of pages
+     */
+    public int getTotalPages() {
+        // Calculate total pages based on the highest page number in reward slots
+        return rewardSlots.stream()
+                .mapToInt(RewardSlot::page)
+                .max()
+                .orElse(-1) + 1; // +1 because pages are 0-indexed
     }
 
     public Optional<RewardSlot> getRewardSlotById(String id) {
@@ -119,6 +169,8 @@ public class PlaytimeConfig {
         // Update the holder with the actual inventory
         holder.setInventory(inventory);
         Set<Integer> usedSlots = new HashSet<>();
+        
+        // Get rewards for the current page based on the reward's page property
         List<RewardSlot> pageRewards = getPageRewards(page);
         //plugin.getLogger().info("Page " + page + " contains " + pageRewards.size() + " rewards");
 
@@ -219,9 +271,26 @@ public class PlaytimeConfig {
                 inventory.setItem(navRowStart + 3, createPlaceholderItem(Material.GRAY_STAINED_GLASS_PANE));
             }
 
-            //plugin.getLogger().info("Adding next page button");
-            ItemStack nextButton = createNavigationButton(nextPageMaterial, nextPageName, nextPageHeadId, NAV_NEXT);
-            inventory.setItem(navRowStart + 5, nextButton);
+            // Check if this is the last page with rewards
+            int totalPages = getTotalPages();
+            if (page < totalPages - 1) {
+                //plugin.getLogger().info("Adding next page button");
+                ItemStack nextButton = createNavigationButton(nextPageMaterial, nextPageName, nextPageHeadId, NAV_NEXT);
+                inventory.setItem(navRowStart + 5, nextButton);
+            } else {
+                // Show "More Rewards Coming Soon" item instead of next button
+                ItemStack moreRewardsItem = new ItemStack(Material.CLOCK);
+                ItemMeta moreRewardsMeta = moreRewardsItem.getItemMeta();
+                if (moreRewardsMeta != null) {
+                    moreRewardsMeta.displayName(Component.text("More Rewards Coming Soon!").color(NamedTextColor.GOLD));
+                    List<Component> lore = new ArrayList<>();
+                    lore.add(Component.text("Check back later for new rewards!").color(NamedTextColor.YELLOW));
+                    moreRewardsMeta.lore(lore);
+                    RewardsGUI.markUnmovable(moreRewardsMeta);
+                    moreRewardsItem.setItemMeta(moreRewardsMeta);
+                }
+                inventory.setItem(navRowStart + 5, moreRewardsItem);
+            }
 
             //plugin.getLogger().info("Adding close button");
             ItemStack closeButton = createNavigationButton(closeMaterial, closeName, closeHeadId, NAV_CLOSE);
@@ -244,6 +313,11 @@ public class PlaytimeConfig {
         return button;
     }
 
+    /**
+     * Get rewards for a specific page based on the reward's page property
+     * @param page The page number
+     * @return List of rewards for the specified page
+     */
     private List<RewardSlot> getPageRewards(int page) {
         List<RewardSlot> allRewards = getRewardSlots();
         List<RewardSlot> pageRewards = new ArrayList<>();

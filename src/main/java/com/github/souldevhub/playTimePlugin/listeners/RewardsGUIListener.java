@@ -202,7 +202,6 @@ public class RewardsGUIListener implements Listener {
     @EventHandler(priority = org.bukkit.event.EventPriority.HIGHEST)
     public void onInventoryDrag(InventoryDragEvent event) {
         if (event.getView().getTopInventory().getHolder() instanceof RewardsGUI.RewardsGUIHolder) {
-            // 移除日志记录，只取消事件
             event.setCancelled(true);
         }
     }

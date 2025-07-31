@@ -29,14 +29,33 @@ public class RewardsGUI {
         }
     }
 
+    /**
+     * Get the total number of pages based on rewards configuration
+     * @param config The PlaytimeConfig instance
+     * @return The total number of pages
+     */
+    public static int getTotalPages(PlaytimeConfig config) {
+        return config.getTotalPages();
+    }
+
     public static void open(Player player, PlaytimeTracker tracker, RewardsGUIListener rewardsGUIListener, int page) {
         if (plugin == null) {
             throw new IllegalStateException("RewardsGUI not initialized! Call init() first.");
         }
         
+        // Validate page number to prevent opening empty pages
+        PlaytimeConfig config = PlaytimeConfig.getInstance(plugin);
+        int totalPages = getTotalPages(config);
+        
+        // Don't open if page is invalid
+        if (page < 0 || page >= totalPages) {
+            player.closeInventory();
+            return;
+        }
+        
         long playtime = tracker.getTotalPlaytime(player.getUniqueId());
         Set<String> claimedRewardsSet = new HashSet<>(rewardsGUIListener.getClaimedRewards(player.getUniqueId()));
-        player.openInventory(PlaytimeConfig.getInstance(plugin).getRewardsGUIForPlayer(playtime, claimedRewardsSet, page));
+        player.openInventory(config.getRewardsGUIForPlayer(playtime, claimedRewardsSet, page));
     }
 
     public static void open(Player player, PlaytimeTracker tracker, RewardsGUIListener rewardsGUIListener) {
@@ -45,7 +64,13 @@ public class RewardsGUI {
 
     public static void openNextPage(JavaPlugin plugin, Player player, PlaytimeTracker tracker, RewardsGUIListener rewardsGUIListener) {
         int currentPage = getPageFrom(player);
-        open(player, tracker, rewardsGUIListener, currentPage + 1);
+        PlaytimeConfig config = PlaytimeConfig.getInstance(plugin);
+        int totalPages = getTotalPages(config);
+        
+        // Only go to the next page if it exists
+        if (currentPage < totalPages - 1) {
+            open(player, tracker, rewardsGUIListener, currentPage + 1);
+        }
     }
 
     public static void openPreviousPage(JavaPlugin plugin, Player player, PlaytimeTracker tracker, RewardsGUIListener rewardsGUIListener) {
