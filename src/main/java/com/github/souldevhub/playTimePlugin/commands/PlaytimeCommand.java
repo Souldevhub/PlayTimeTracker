@@ -15,8 +15,10 @@ import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,25 +35,32 @@ public class PlaytimeCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
-        List<String> completions = new ArrayList<>();
-
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String @NotNull [] args) {
         if (args.length == 1) {
+            List<String> completions = new ArrayList<>();
             if (sender.hasPermission("playtime.admin")) {
-                completions.add("add");
-                completions.add("reset");
+                completions.addAll(Arrays.asList("add", "reset", "reload", "debug"));
             }
-        } else if (args.length == 2 && sender.hasPermission("playtime.admin")) {
+            return completions;
+        } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("reset")) {
-                return null; // Return null to show all online players
+                return null; // Return null to indicate we want player names
+            } else if (args[0].equalsIgnoreCase("debug")) {
+                return Arrays.asList("true", "false");
             }
-        } else if (args.length == 3 && args[0].equalsIgnoreCase("add") && sender.hasPermission("playtime.admin")) {
-            completions.add("1h");
-        } else if (args.length == 4 && args[0].equalsIgnoreCase("add") && sender.hasPermission("playtime.admin")) {
-            completions.add("30m");
+        } else if (args.length == 3 || args.length == 4) {
+            if (args[0].equalsIgnoreCase("add")) {
+                // Provide time format hints
+                List<String> completions = new ArrayList<>();
+                if (args.length == 3) {
+                    completions.add("<hours>h");
+                } else if (args.length == 4) {
+                    completions.add("[<minutes>m]");
+                }
+                return completions;
+            }
         }
-
-        return completions;
+        return new ArrayList<>(); // Empty list for no completions
     }
 
     @Override
@@ -80,6 +89,22 @@ public class PlaytimeCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
                 handleResetCommand(sender, args);
+                return true;
+            }
+            case "reload" -> {
+                if (!sender.hasPermission("playtime.admin")) {
+                    sender.sendMessage(Component.text("You don't have permission to use this command!", NamedTextColor.RED));
+                    return true;
+                }
+                handleReloadCommand(sender);
+                return true;
+            }
+            case "debug" -> {
+                if (!sender.hasPermission("playtime.admin")) {
+                    sender.sendMessage(Component.text("You don't have permission to use this command!", NamedTextColor.RED));
+                    return true;
+                }
+                handleDebugCommand(sender, args);
                 return true;
             }
             default -> {
@@ -196,5 +221,49 @@ public class PlaytimeCommand implements CommandExecutor, TabCompleter {
 
         target.sendMessage(Component.text("Your playtime has been reset by an admin.", NamedTextColor.RED));
         target.playSound(target.getLocation(), Sound.BLOCK_ANVIL_LAND, 0.5f, 1.0f);
+    }
+    
+    private void handleReloadCommand(@NotNull CommandSender sender) {
+        try {
+            plugin.reloadConfig();
+            plugin.getPlaytimeConfig().loadConfig(plugin);
+            
+            sender.sendMessage(Component.text("PlayTimePulse configuration reloaded successfully!", NamedTextColor.GREEN));
+            
+            if (sender instanceof Player player) {
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 0.5f, 1.0f);
+            }
+        } catch (Exception e) {
+            sender.sendMessage(Component.text("Failed to reload configuration: " + e.getMessage(), NamedTextColor.RED));
+            plugin.getLogger().severe("Failed to reload configuration: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    private void handleDebugCommand(@NotNull CommandSender sender, @NotNull String[] args) {
+        if (args.length < 2) {
+            sender.sendMessage(Component.text("Current debug mode: " + (plugin.isDebugMode() ? "ENABLED" : "DISABLED"), 
+                plugin.isDebugMode() ? NamedTextColor.GREEN : NamedTextColor.RED));
+            sender.sendMessage(Component.text("Usage: /playtime debug <true|false>", NamedTextColor.GRAY));
+            return;
+        }
+        
+        boolean newDebugState;
+        try {
+            newDebugState = Boolean.parseBoolean(args[1]);
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage(Component.text("Invalid argument. Use 'true' or 'false'.", NamedTextColor.RED));
+            return;
+        }
+        
+        plugin.setDebugMode(newDebugState);
+        
+        sender.sendMessage(Component.text("Debug mode has been " + (newDebugState ? "ENABLED" : "DISABLED"), 
+            newDebugState ? NamedTextColor.GREEN : NamedTextColor.RED));
+        
+        if (sender instanceof Player player) {
+            player.playSound(player.getLocation(), 
+                newDebugState ? Sound.BLOCK_NOTE_BLOCK_CHIME : Sound.BLOCK_NOTE_BLOCK_BASS, 0.5f, 1.0f);
+        }
     }
 }

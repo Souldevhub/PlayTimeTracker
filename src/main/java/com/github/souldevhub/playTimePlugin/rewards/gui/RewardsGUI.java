@@ -20,7 +20,7 @@ public class RewardsGUI {
     public static void init(JavaPlugin plugin) {
         RewardsGUI.plugin = plugin;
         staticItemKey = new NamespacedKey(plugin, "static_item");
-        //plugin.getLogger().info("RewardsGUI initialized");
+        plugin.getLogger().info("RewardsGUI initialized");
     }
 
     public static class RewardsGUIHolder extends PageAwareHolder {

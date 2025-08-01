@@ -1,0 +1,14 @@
+# Filipino translation file
+
+gui:
+  translations:
+    status: "Katayuan:"
+    claimed: "Nakuha na"
+    ready_to_claim: "Handa nang Kunin"
+    not_claimed: "Hindi pa Nakuha"
+    required_time: "Kinakailangang Oras:"
+    your_time: "Iyong Oras:"
+    already_claimed: "Nakuha na"
+    reward_not_found: "Hindi nakita ang gantimpala"
+    no_rewards_available: "Walang magagamit na gantimpala"
+    ready_to_claim_status: "Handa nang kunin"

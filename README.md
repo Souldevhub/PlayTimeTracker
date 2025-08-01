@@ -16,6 +16,8 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 - ⚡ **High Performance** - Optimized code that won't slow down your server
 - 🛡️ **Reward Error Handling** - Prevents reward spamming even when commands fail
 - ⚙️ **Flexible Configuration** - Easily customize all rewards, GUI, and settings
+- 🌍 **Multi-Language Support** - Supports 8 languages including English, Chinese, Russian, German, French, and more
+- 🔧 **Admin Tools** - Reload configuration and debug mode for easier management
 
 ## 📦 All Features
 
@@ -52,6 +54,14 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 - 📊 bStats integration for anonymous usage statistics
 - 📁 Flat-file storage with autosave
 - ⚙️ Performance optimized and easy to configure
+- 🌍 Multi-language support:
+  - 8 languages supported (English, Chinese, Brazilian Portuguese, Russian, Filipino, German, French, Finnish)
+  - Easily extensible with custom language files
+  - Language setting in config.yml
+- 🔧 Admin tools:
+  - `/playtime reload` command to reload configuration without restarting
+  - Debug mode for troubleshooting with detailed logging
+  - `/playtime debug` command to toggle debug mode
 
 ---
 
@@ -62,6 +72,8 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 | `/playtime`                                    | Shows playtime and rewards GUI              | playtime.use   |
 | `/playtime add <player> <hours>h [<minutes>m]` | Add playtime to player                      | playtime.admin |
 | `/playtime reset <player>`                     | Reset player's playtime and claimed rewards | playtime.admin |
+| `/playtime reload`                             | Reload plugin configuration                 | playtime.admin |
+| `/playtime debug [true/false]`                 | Toggle debug mode (shows additional logs)   | playtime.admin |
 
 ---
 
@@ -74,6 +86,53 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 | `%playtime_overall%`           | Total time in seconds (saved + current)                  |
 | `%playtime_saved%`             | Saved playtime only (in seconds)                         |
 | `%playtime_current%`           | Current online session (in seconds)                      |
+| `%playtime_seconds%`           | Seconds part of total playtime                           |
+| `%playtime_minutes%`           | Minutes part of total playtime                           |
+| `%playtime_hours%`             | Hours part of total playtime                             |
+| `%playtime_days%`              | Days part of total playtime                              |
+
+### 🎁 Advanced Reward Placeholders
+
+| Placeholder                             | Description                                              |
+|-----------------------------------------|----------------------------------------------------------|
+| `%playtime_required%`                   | Time required for next unclaimed reward                  |
+| `%playtime_required_{rewardId}%`        | Status of specific reward (Claimed/Ready/Not Claimed)    |
+| `%playtime_time_left%`                  | Time left for next reward                                |
+| `%playtime_time_left_{rewardId}%`       | Time left for specific reward                            |
+| `%playtime_claimable_rewards%`          | Number of rewards that can be claimed right now          |
+
+### 📋 Placeholder Examples
+
+1. **Basic Playtime Display**:
+   - `%playtime_overall_formatted%` → `2d 4h 30m`
+   - `%playtime_days%` → `2`
+
+2. **Reward Status Tracking**:
+   - `%playtime_required%` → `5h 30m` (time for next reward)
+   - `%playtime_required_level_5%` → `Claimed` (status of specific reward)
+   - `%playtime_time_left_level_5%` → `2h 15m` (time left for specific reward)
+   - `%playtime_claimable_rewards%` → `3` (number of claimable rewards)
+
+3. **Integration Examples**:
+   - In chat: "You've played for %playtime_overall_formatted%!"
+   - In holograms: "Next reward in: %playtime_time_left%"
+   - In scoreboards: "Claimable Rewards: %playtime_claimable_rewards%"
+
+### 🛠️ Placeholder Usage Tips
+
+1. **Reward IDs**:
+   - Use the exact ID from your config.yml
+   - Case-sensitive (level_5 ≠ Level_5)
+   - Replace spaces with underscores
+
+2. **Formatting**:
+   - All time values are formatted as `Xd Yh Zm Ws`
+   - Empty values are omitted (e.g., `2h 30s` instead of `0d 2h 0m 30s`)
+
+3. **Error Handling**:
+   - Returns `N/A` if PlaceholderAPI integration fails
+   - Returns `Reward not found` for invalid reward IDs
+   - Returns `All rewards claimed` when no more rewards are available
 
 ---
 
@@ -99,6 +158,11 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
   - AFK protection settings:
     - `interaction-threshold`: Minimum number of interactions required in the time window
     - `time-window-minutes`: Time window in minutes to check for interactions
+  - Language settings:
+    - `language`: Set the plugin language (en, zh, pt_BR, ru, fil, de, fr, fi)
+    - Language files automatically copied to plugin directory for customization
+  - Debug mode:
+    - `debug`: Enable/disable debug mode for additional logging
   - Configuration validation:
     - Automatic detection of nested reward configurations (indentation errors)
     - Helpful warning messages for fixing configuration issues

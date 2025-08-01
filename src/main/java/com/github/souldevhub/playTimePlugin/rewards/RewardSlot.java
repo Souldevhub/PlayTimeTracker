@@ -170,6 +170,11 @@ public class RewardSlot {
             String id = map.get("id") != null ? map.get("id").toString() : null;
             String name = map.get("name") != null ? map.get("name").toString() : null;
             String matName = map.get("material") != null ? map.get("material").toString() : null;
+            
+            if (id == null || id.isEmpty() || matName == null || matName.isEmpty()) return null;
+
+            Material material = Material.valueOf(matName.toUpperCase());
+            
             String headId = map.get("headId") != null ? map.get("headId").toString() : null;
             int slot = map.get("slot") instanceof Number n ? n.intValue() : 0;
             List<String> lore = map.get("lore") instanceof List<?> l ? (List<String>) l : Collections.emptyList();
@@ -178,11 +183,7 @@ public class RewardSlot {
             String claimSound = map.get("claimSound") != null ? map.get("claimSound").toString() : null;
             float soundVolume = map.get("soundVolume") instanceof Number n ? n.floatValue() : 1.0f;
             float soundPitch = map.get("soundPitch") instanceof Number n ? n.floatValue() : 1.0f;
-            int page = map.get("page") instanceof Number n ? n.intValue() : 0; // Default to 0 if not specified
-
-            if (id == null || id.isEmpty() || matName == null || matName.isEmpty()) return null;
-
-            Material material = Material.valueOf(matName.toUpperCase());
+            int page = map.get("page") instanceof Number n ? n.intValue() : 0;
 
             return new Builder()
                     .setId(id)

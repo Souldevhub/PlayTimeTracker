@@ -1,106 +1,83 @@
 package com.github.souldevhub.playTimePlugin;
 
-import com.github.souldevhub.playTimePlugin.commands.PlaytimeCommand;
-import com.github.souldevhub.playTimePlugin.config.PlaytimeConfig;
 import com.github.souldevhub.playTimePlugin.data.DataHandler;
-import com.github.souldevhub.playTimePlugin.listeners.ActivityListener;
-import com.github.souldevhub.playTimePlugin.listeners.PlaytimeListener;
-import com.github.souldevhub.playTimePlugin.listeners.RewardsGUIListener;
-import com.github.souldevhub.playTimePlugin.placeholders.PlaceholderAPIHook;
 import com.github.souldevhub.playTimePlugin.playtime.PlaytimeTracker;
+import com.github.souldevhub.playTimePlugin.placeholders.PlaceholderAPIHook;
+import com.github.souldevhub.playTimePlugin.listeners.RewardsGUIListener;
+import com.github.souldevhub.playTimePlugin.config.PlaytimeConfig;
+import com.github.souldevhub.playTimePlugin.data.ClaimedRewardsDataHandler;
+import com.github.souldevhub.playTimePlugin.commands.PlaytimeCommand;
+import com.github.souldevhub.playTimePlugin.listeners.PlaytimeListener;
+import com.github.souldevhub.playTimePlugin.listeners.ActivityListener;
 import com.github.souldevhub.playTimePlugin.rewards.gui.RewardsGUI;
-import org.bstats.bukkit.Metrics;
-import org.bukkit.Bukkit;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-
+import org.bstats.bukkit.Metrics;
 
 public final class PlaytimePulse extends JavaPlugin {
     private DataHandler dataHandler;
     private PlaytimeTracker playtimeTracker;
     private RewardsGUIListener rewardsGUIListener;
+    private ClaimedRewardsDataHandler claimedRewardsDataHandler;
     private PlaytimeConfig playtimeConfig;
+    private boolean debugMode = false;
 
     @Override
     public void onEnable() {
+        // Initialize bStats metrics
         int pluginId = 26638;
         new Metrics(this, pluginId);
-        // Plugin startup logic
+        
+        // Save default config
         saveDefaultConfig();
+        
+        // Load debug mode setting
+        debugMode = getConfig().getBoolean("debug", false);
+        if (debugMode) {
+            getLogger().info("Debug mode enabled");
+        }
 
-        // Initialize RewardsGUI first
+        // Initialize core components
+        dataHandler = new DataHandler(this);
+        playtimeTracker = new PlaytimeTracker(this, dataHandler);
+        rewardsGUIListener = new RewardsGUIListener(this);
+        claimedRewardsDataHandler = new ClaimedRewardsDataHandler(this);
+        playtimeConfig = PlaytimeConfig.getInstance(this);
+
+        // Initialize RewardsGUI
         RewardsGUI.init(this);
 
-        this.dataHandler = new DataHandler(this);
-        this.playtimeTracker = new PlaytimeTracker(this, dataHandler);
-        this.rewardsGUIListener = new RewardsGUIListener(this);
-        
-        // Configure AFK protection from config
-        configureAFKProtection();
-        
+        // Start tracking task
         playtimeTracker.startTrackingTask();
 
-        // Load configuration and pre-validate sounds
-        Bukkit.getScheduler().runTask(this, () -> {
-            var logger = getLogger();
-            logger.info("Loading reward configuration...");
-            playtimeConfig = PlaytimeConfig.getInstance(this);
-            playtimeConfig.loadConfig(this);
-
-            int rewardCount = playtimeConfig.getRewardSlots().size();
-            logger.info("Loaded " + rewardCount + " reward slots from configuration");
-        });
-
-        // Register RewardsGUIListener with dependencies
+        // Register event listeners
         getServer().getPluginManager().registerEvents(rewardsGUIListener, this);
+        getServer().getPluginManager().registerEvents(new PlaytimeListener(playtimeTracker), this);
+        getServer().getPluginManager().registerEvents(new ActivityListener(playtimeTracker), this);
 
+        // Register commands
+        PlaytimeCommand playtimeCommand = new PlaytimeCommand(playtimeTracker, this);
+        getCommand("playtime").setExecutor(playtimeCommand);
+        getCommand("playtime").setTabCompleter(playtimeCommand);
 
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            PlaceholderAPIHook placeholderHook = new PlaceholderAPIHook(dataHandler, playtimeTracker);
-            placeholderHook.register();
+        // Hook into PlaceholderAPI if available
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new PlaceholderAPIHook(dataHandler, playtimeTracker, playtimeConfig, claimedRewardsDataHandler, this).register();
             getLogger().info("Hooked into PlaceholderAPI!");
         } else {
             getLogger().warning("PlaceholderAPI not found. Placeholders will not work.");
         }
-
-
-        PlaytimeListener listener = new PlaytimeListener(playtimeTracker);
-        getServer().getPluginManager().registerEvents(listener, this);
         
-        // Register ActivityListener for AFK protection
-        ActivityListener activityListener = new ActivityListener(playtimeTracker);
-        getServer().getPluginManager().registerEvents(activityListener, this);
-
-        PluginCommand command = getCommand("playtime");
-        if (command != null) {
-            PlaytimeCommand playtimeCommand = new PlaytimeCommand(playtimeTracker, this);
-            command.setExecutor(playtimeCommand);
-            command.setTabCompleter(playtimeCommand);
-        } else {
-            getLogger().severe("Command 'playtime' is not defined in plugin.yml!");
-        }
-
-
-        getLogger().info("PlayTimePulse loaded!");
-
+        getLogger().info("PlayTimePulse v" + getDescription().getVersion() + " loaded!");
     }
 
     @Override
     public void onDisable() {
-        if (dataHandler != null) {
-            if (playtimeTracker != null) {
-                playtimeTracker.flushAllSessionTimes();
-            }
-            dataHandler.saveAll();
+        // Plugin shutdown logic
+        if (debugMode) {
+            getLogger().info("PlaytimePulse plugin disabled!");
         }
-        getLogger().info("PlayTimePulse shut down.");
     }
-
-    public RewardsGUIListener getRewardsGUIListener() {
-        return rewardsGUIListener;
-    }
-
+    
     public DataHandler getDataHandler() {
         return dataHandler;
     }
@@ -109,18 +86,25 @@ public final class PlaytimePulse extends JavaPlugin {
         return playtimeTracker;
     }
     
-    /**
-     * Configure AFK protection settings from config.yml
-     */
-    private void configureAFKProtection() {
-        FileConfiguration config = getConfig();
-
-        int interactionThreshold = config.getInt("afk-protection.interaction-threshold", 2);
-        long timeWindowMinutes = config.getLong("afk-protection.time-window-minutes", 5);
-        
-        // Apply settings to playtime tracker
-        playtimeTracker.configureAFKProtection(interactionThreshold, timeWindowMinutes);
-        
-        getLogger().info("AFK Protection configured: " + interactionThreshold + " interactions in " + timeWindowMinutes + " minutes");
+    public RewardsGUIListener getRewardsGUIListener() {
+        return rewardsGUIListener;
+    }
+    
+    public ClaimedRewardsDataHandler getClaimedRewardsDataHandler() {
+        return claimedRewardsDataHandler;
+    }
+    
+    public PlaytimeConfig getPlaytimeConfig() {
+        return playtimeConfig;
+    }
+    
+    public boolean isDebugMode() {
+        return debugMode;
+    }
+    
+    public void setDebugMode(boolean debugMode) {
+        this.debugMode = debugMode;
+        getConfig().set("debug", debugMode);
+        saveConfig();
     }
 }

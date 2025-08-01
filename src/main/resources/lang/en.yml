@@ -1,0 +1,14 @@
+# English translation file
+
+gui:
+  translations:
+    status: "Status:"
+    claimed: "Claimed"
+    ready_to_claim: "Ready to Claim"
+    not_claimed: "Not Claimed"
+    required_time: "Required Time:"
+    your_time: "Your Time:"
+    already_claimed: "Already claimed"
+    reward_not_found: "Reward not found"
+    no_rewards_available: "No rewards available"
+    ready_to_claim_status: "Ready to claim"

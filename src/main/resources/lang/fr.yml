@@ -1,0 +1,14 @@
+# French translation file
+
+gui:
+  translations:
+    status: "Statut :"
+    claimed: "Récupérée"
+    ready_to_claim: "Prête à être récupérée"
+    not_claimed: "Non récupérée"
+    required_time: "Temps requis :"
+    your_time: "Votre temps :"
+    already_claimed: "Déjà récupérée"
+    reward_not_found: "Récompense introuvable"
+    no_rewards_available: "Aucune récompense disponible"
+    ready_to_claim_status: "Prête à être récupérée"

@@ -1,0 +1,14 @@
+# Finnish translation file
+
+gui:
+  translations:
+    status: "Tila:"
+    claimed: "Lunastettu"
+    ready_to_claim: "Valmis lunastettavaksi"
+    not_claimed: "Ei lunastettu"
+    required_time: "Vaadittu aika:"
+    your_time: "Sinun aikasi:"
+    already_claimed: "Jo lunastettu"
+    reward_not_found: "Palkintoa ei löytynyt"
+    no_rewards_available: "Ei palkintoja saatavilla"
+    ready_to_claim_status: "Valmis lunastettavaksi"

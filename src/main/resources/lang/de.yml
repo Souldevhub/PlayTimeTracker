@@ -1,0 +1,14 @@
+# German translation file
+
+gui:
+  translations:
+    status: "Status:"
+    claimed: "Beansprucht"
+    ready_to_claim: "Bereit zum Abholen"
+    not_claimed: "Nicht beansprucht"
+    required_time: "Benötigte Zeit:"
+    your_time: "Deine Zeit:"
+    already_claimed: "Bereits beansprucht"
+    reward_not_found: "Belohnung nicht gefunden"
+    no_rewards_available: "Keine Belohnungen verfügbar"
+    ready_to_claim_status: "Bereit zum Abholen"

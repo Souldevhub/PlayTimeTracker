@@ -1,0 +1,14 @@
+# Chinese translation file
+
+gui:
+  translations:
+    status: "状态:"
+    claimed: "已领取"
+    ready_to_claim: "可领取"
+    not_claimed: "未领取"
+    required_time: "所需时间:"
+    your_time: "你的游戏时间:"
+    already_claimed: "已领取"
+    reward_not_found: "未找到奖励"
+    no_rewards_available: "无可用奖励"
+    ready_to_claim_status: "可领取"

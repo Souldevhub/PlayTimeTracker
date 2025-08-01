@@ -1,0 +1,14 @@
+# Russian translation file
+
+gui:
+  translations:
+    status: "Статус:"
+    claimed: "Получено"
+    ready_to_claim: "Готово к получению"
+    not_claimed: "Не получено"
+    required_time: "Требуемое время:"
+    your_time: "Ваше время:"
+    already_claimed: "Уже получено"
+    reward_not_found: "Награда не найдена"
+    no_rewards_available: "Нет доступных наград"
+    ready_to_claim_status: "Готово к получению"

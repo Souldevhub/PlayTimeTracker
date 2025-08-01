@@ -1,0 +1,14 @@
+# Brazilian Portuguese translation file
+
+gui:
+  translations:
+    status: "Status:"
+    claimed: "Reivindicado"
+    ready_to_claim: "Pronto para Reivindicar"
+    not_claimed: "Não Reivindicado"
+    required_time: "Tempo Necessário:"
+    your_time: "Seu Tempo:"
+    already_claimed: "Já reivindicado"
+    reward_not_found: "Recompensa não encontrada"
+    no_rewards_available: "Nenhuma recompensa disponível"
+    ready_to_claim_status: "Pronto para reivindicar"

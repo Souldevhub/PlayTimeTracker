@@ -52,12 +52,10 @@ public class RewardsGUIListener implements Listener {
         
         ItemStack clicked = event.getCurrentItem();
         if (clicked == null || clicked.getType().isAir()) {
-            //plugin.getLogger().info("Clicked item is null or air, cancelling");
             return;
         }
 
         if (!clicked.hasItemMeta()) {
-            //plugin.getLogger().info("Clicked item has no metadata, cancelling");
             // Cancel interaction with items that don't have metadata
             return;
         }
@@ -65,14 +63,10 @@ public class RewardsGUIListener implements Listener {
         ItemMeta meta = clicked.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
-
         // Check if this is a navigation button
         if (data.has(navButtonTypeKey, PersistentDataType.STRING)) {
-            //plugin.getLogger().info("Clicked navigation button");
             String buttonType = data.get(navButtonTypeKey, PersistentDataType.STRING);
-            //plugin.getLogger().info("Navigation button type: " + buttonType);
             if (buttonType == null) {
-                //plugin.getLogger().info("Navigation button type is null, returning");
                 return;
             }
 
@@ -89,20 +83,15 @@ public class RewardsGUIListener implements Listener {
 
         // Check if this is a reward item
         if (data.has(rewardIdKey, PersistentDataType.STRING)) {
-            //plugin.getLogger().info("Clicked reward item");
             String rewardId = data.get(rewardIdKey, PersistentDataType.STRING);
-            //plugin.getLogger().info("Reward ID: " + rewardId);
             if (rewardId == null || rewardId.trim().isEmpty()) {
-                //plugin.getLogger().info("Reward ID is null or empty, returning");
                 return;
             }
 
             UUID uuid = player.getUniqueId();
             List<String> claimed = new ArrayList<>(claimedRewardsDataHandler.getClaimedRewards(uuid)); // Create a copy to modify
-            //plugin.getLogger().info("Player has claimed rewards: " + claimed.size());
 
             if (claimed.contains(rewardId)) {
-                //plugin.getLogger().info("Reward already claimed");
                 sendAlreadyClaimedMessage(player);
                 refreshGUI(player);
                 return;
@@ -110,83 +99,95 @@ public class RewardsGUIListener implements Listener {
 
             java.util.Optional<RewardSlot> rewardOpt = PlaytimeConfig.getInstance(plugin).getRewardSlotById(rewardId);
             if (rewardOpt.isEmpty()) {
-                //plugin.getLogger().info("Reward not found in config");
                 player.sendMessage(net.kyori.adventure.text.Component.text("This reward no longer exists!").color(net.kyori.adventure.text.format.NamedTextColor.RED));
                 return;
             }
 
             RewardSlot reward = rewardOpt.get();
             long playtime = plugin.getPlaytimeTracker().getTotalPlaytime(uuid);
-            //plugin.getLogger().info("Player playtime: " + playtime + ", Required playtime: " + reward.requiredPlaytime());
 
             if (playtime < reward.requiredPlaytime()) {
-                //plugin.getLogger().info("Player doesn't have enough playtime");
                 player.sendMessage(net.kyori.adventure.text.Component.text("You don't have enough playtime to claim this reward!").color(net.kyori.adventure.text.format.NamedTextColor.RED));
                 refreshGUI(player);
                 return;
             }
 
-            //plugin.getLogger().info("Claiming reward for player");
-            // Prepare all commands with player name substitution
+            // First, prepare all commands with player name substitution
             List<String> processedCommands = new ArrayList<>();
             for (String cmd : reward.commands()) {
                 processedCommands.add(cmd.replace("%player%", player.getName()));
             }
             
-            // Execute all commands with strict transactional behavior
-            boolean allCommandsSuccessful = true;
+            // Validate all commands first (transactional approach)
+            boolean allCommandsValid = true;
             for (String cmd : processedCommands) {
-                //plugin.getLogger().info("Executing command: " + cmd);
+                // Basic validation - check if command can be parsed
                 try {
-                    boolean success = plugin.getServer().dispatchCommand(
-                            plugin.getServer().getConsoleSender(),
-                            cmd
-                    );
-                    if (!success) {
-                        plugin.getLogger().warning("Failed to execute command for player " + player.getName() + ": " + cmd);
-                        allCommandsSuccessful = false;
-                        // Break on first failure for transactional behavior
+                    // We can add more sophisticated validation here if needed
+                    if (cmd == null || cmd.trim().isEmpty()) {
+                        allCommandsValid = false;
+                        plugin.getLogger().warning("Empty or null command found for reward " + rewardId);
                         break;
                     }
                 } catch (Exception e) {
-                    plugin.getLogger().severe("Error executing command for player " + player.getName() + ": " + cmd);
+                    plugin.getLogger().severe("Error validating command for reward " + rewardId + ": " + cmd);
                     plugin.getLogger().severe("Error message: " + e.getMessage());
-                    allCommandsSuccessful = false;
-                    // Break on first exception for transactional behavior
+                    allCommandsValid = false;
                     break;
                 }
             }
-
-            // Play sound feedback - only if all commands were attempted
-            player.playSound(player.getLocation(), reward.getSound(plugin), reward.soundVolume(), reward.soundPitch());
-
-            // Update claimed rewards regardless of success to prevent spamming
-            // But provide different feedback based on whether commands succeeded
-            claimed.add(rewardId);
-            // Update the cache with the modified list
-            claimedRewardsDataHandler.saveClaimedRewards(uuid, claimed);
             
-            if (allCommandsSuccessful) {
-                player.sendMessage(net.kyori.adventure.text.Component.text("Reward claimed successfully!").color(net.kyori.adventure.text.format.NamedTextColor.GREEN));
-                refreshGUI(player); // Refresh GUI first to show the updated state
-                player.closeInventory(); // Then close the inventory
+            // Only proceed if all commands are valid
+            if (allCommandsValid) {
+                // Execute all commands
+                boolean allCommandsSuccessful = true;
+                for (String cmd : processedCommands) {
+                    try {
+                        boolean success = plugin.getServer().dispatchCommand(
+                                plugin.getServer().getConsoleSender(),
+                                cmd
+                        );
+                        if (!success) {
+                            plugin.getLogger().warning("Failed to execute command for player " + player.getName() + ": " + cmd);
+                            allCommandsSuccessful = false;
+                            // Break on first failure for transactional behavior
+                            break;
+                        }
+                    } catch (Exception e) {
+                        plugin.getLogger().severe("Error executing command for player " + player.getName() + ": " + cmd);
+                        plugin.getLogger().severe("Error message: " + e.getMessage());
+                        allCommandsSuccessful = false;
+                        // Break on first exception for transactional behavior
+                        break;
+                    }
+                }
+
+                // Play sound feedback - only if all commands were attempted
+                player.playSound(player.getLocation(), reward.getSound(plugin), reward.soundVolume(), reward.soundPitch());
+
+                // Update claimed rewards regardless of success to prevent spamming
+                // But provide different feedback based on whether commands succeeded
+                claimed.add(rewardId);
+                // Update the cache with the modified list
+                claimedRewardsDataHandler.saveClaimedRewards(uuid, claimed);
+                
+                if (allCommandsSuccessful) {
+                    player.sendMessage(net.kyori.adventure.text.Component.text("Reward claimed successfully!").color(net.kyori.adventure.text.format.NamedTextColor.GREEN));
+                    refreshGUI(player); // Refresh GUI first to show the updated state
+                    player.closeInventory(); // Then close the inventory
+                } else {
+                    player.sendMessage(net.kyori.adventure.text.Component.text("Reward processed with errors! Some commands failed - please contact an admin.").color(net.kyori.adventure.text.format.NamedTextColor.YELLOW));
+                    plugin.getLogger().warning("Reward " + rewardId + " processed for " + player.getName() + " but some commands failed");
+                    refreshGUI(player); // Refresh GUI first to show the updated state
+                    player.closeInventory(); // Then close the inventory
+                }
             } else {
-                player.sendMessage(net.kyori.adventure.text.Component.text("Reward processed with errors! Some commands failed - please contact an admin.").color(net.kyori.adventure.text.format.NamedTextColor.YELLOW));
-                plugin.getLogger().warning("Reward " + rewardId + " processed for " + player.getName() + " but some commands failed");
-                refreshGUI(player); // Refresh GUI first to show the updated state
-                player.closeInventory(); // Then close the inventory
+                // Commands are not valid
+                player.sendMessage(net.kyori.adventure.text.Component.text("Reward claim failed! Invalid command configuration.").color(net.kyori.adventure.text.format.NamedTextColor.RED));
+                plugin.getLogger().warning("Reward " + rewardId + " claim failed for " + player.getName() + " due to invalid command configuration");
+                // Don't close the inventory so the player can see the error message
             }
         }
-
-        /* For all other items (static items like fillers, placeholders, etc.)
-        if (data.has(staticItemKey, PersistentDataType.BOOLEAN)) {
-            //plugin.getLogger().info("Clicked static item, cancelling");
-            // Cancel interaction with static items
-            return;
-        }*/
-
-        // Cancel interaction with any other items
-        //plugin.getLogger().info("Clicked unknown item, cancelling");
     }
 
     private void sendAlreadyClaimedMessage(Player player) {
