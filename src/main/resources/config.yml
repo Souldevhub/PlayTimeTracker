@@ -1,6 +1,25 @@
 # Sound names can be found here: https://www.digminecraft.com/lists/sound_list_pc.php
 # All sounds play at standard volume (1.0) and pitch (1.0)
 
+# PlaceholderAPI Placeholders:
+# Basic Playtime Placeholders:
+# %playtime_overall_formatted% - Total formatted playtime (e.g., "2d 4h 30m")
+# %playtime_formatted% - Current session formatted playtime
+# %playtime_overall% - Total playtime in seconds
+# %playtime_saved% - Saved playtime in seconds
+# %playtime_current% - Current session playtime in seconds
+# %playtime_seconds% - Seconds part of total playtime
+# %playtime_minutes% - Minutes part of total playtime
+# %playtime_hours% - Hours part of total playtime
+# %playtime_days% - Days part of total playtime
+#
+# Advanced Reward Placeholders:
+# %playtime_required% - Time required for next unclaimed reward
+# %playtime_required_{rewardId}% - Status of specific reward (Claimed/Ready/Not Claimed)
+# %playtime_time_left% - Time left for next reward
+# %playtime_time_left_{rewardId}% - Time left for specific reward
+# %playtime_claimable_rewards% - Number of rewards that can be claimed right now
+
 # Debug mode - enables additional logging
 debug: false
 
@@ -47,6 +66,18 @@ gui:
 
 # Rewards configuration
 # Each reward has a unique ID and can be customized extensively
+# Placeholder examples:
+# %player_name% - Player's name
+# %playtime_overall_formatted% - Total formatted playtime (e.g., "2d 4h 30m")
+# %playtime_current% - Current session playtime in seconds
+# %playtime_saved% - Saved playtime in seconds
+# %playtime_overall% - Total playtime in seconds
+# %playtime_days% - Days part of total playtime
+# %playtime_hours% - Hours part of total playtime
+# %playtime_minutes% - Minutes part of total playtime
+# %playtime_seconds% - Seconds part of total playtime
+# %playtime_required% - Time required for next unclaimed reward
+# %playtime_claimable_rewards% - Number of rewards that can be claimed right now
 rewards:
   level_0:
     id: level_0
@@ -57,7 +88,12 @@ rewards:
     page: 0
     claimSound: entity.experience_orb.pickup
     lore:
+      - '&7Welcome &f%player_name%&7!'
       - '&7Your first step into the world.'
+      - '&7You have played for &f%playtime_overall_formatted%&7.'
+      - '&7Current session: &f%playtime_current%s&7.'
+      - '&7Total playtime: &f%playtime_overall%s&7.'
+      - '&7That is &f%playtime_days% &7days, &f%playtime_hours% &7hours, &f%playtime_minutes% &7minutes.'
       - '&7Reward for joining the adventure.'
     requiredPlaytime: 1800
     commands:
@@ -78,6 +114,9 @@ rewards:
     lore:
       - '&7Beginning to find your footing.'
       - "&7You're getting the hang of this."
+      - '&7Next reward in: &f%playtime_time_left%&7.'
+      - '&7Claimable rewards: &f%playtime_claimable_rewards%&7.'
+      - '&7Your progress: &f%playtime_overall_formatted%&7.'
     requiredPlaytime: 3600
     commands:
       - say %player% has reached Level 1!

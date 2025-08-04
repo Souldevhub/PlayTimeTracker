@@ -117,6 +117,7 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
    - In chat: "You've played for %playtime_overall_formatted%!"
    - In holograms: "Next reward in: %playtime_time_left%"
    - In scoreboards: "Claimable Rewards: %playtime_claimable_rewards%"
+   - In reward lore: "&7Welcome &f%player_name%&7! You have played for &f%playtime_overall_formatted%&7."
 
 ### 🛠️ Placeholder Usage Tips
 

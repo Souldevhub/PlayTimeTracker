@@ -55,7 +55,7 @@ public class RewardsGUI {
         
         long playtime = tracker.getTotalPlaytime(player.getUniqueId());
         Set<String> claimedRewardsSet = new HashSet<>(rewardsGUIListener.getClaimedRewards(player.getUniqueId()));
-        player.openInventory(config.getRewardsGUIForPlayer(playtime, claimedRewardsSet, page));
+        player.openInventory(config.getRewardsGUIForPlayer(playtime, claimedRewardsSet, page, player.getUniqueId()));
     }
 
     public static void open(Player player, PlaytimeTracker tracker, RewardsGUIListener rewardsGUIListener) {

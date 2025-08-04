@@ -272,6 +272,8 @@ public class PlaytimeConfig {
                 }
                 inventory.setItem(reward.slot(), claimedItem);
             } else if (playtime >= reward.requiredPlaytime()) {
+                // We need to pass a player UUID to support placeholders, but this method doesn't have access to it
+                // For now, we'll continue using the existing method
                 ItemStack item = createRewardItem(reward);
                 ItemMeta meta = item.getItemMeta();
                 if (meta != null) {
@@ -295,6 +297,8 @@ public class PlaytimeConfig {
                 }
                 inventory.setItem(reward.slot(), item);
             } else {
+                // We need to pass a player UUID to support placeholders, but this method doesn't have access to it
+                // For now, we'll continue using the existing method
                 ItemStack item = createRewardItem(reward);
                 ItemMeta meta = item.getItemMeta();
                 if (meta != null) {
@@ -365,6 +369,167 @@ public class PlaytimeConfig {
         return inventory;
     }
 
+    public Inventory getRewardsGUIForPlayer(long playtime, Set<String> claimed, int page, UUID playerUUID) {
+        // Create the holder with null inventory first
+        RewardsGUI.RewardsGUIHolder holder = new RewardsGUI.RewardsGUIHolder(page, null);
+        // Create the inventory with the holder
+        Inventory inventory = Bukkit.createInventory(holder, guiSize, Component.text("Playtime Rewards - Page " + (page + 1)));
+        // Update the holder with the actual inventory
+        holder.setInventory(inventory);
+        Set<Integer> usedSlots = new HashSet<>();
+        
+        // Get rewards for the current page based on the reward's page property
+        List<RewardSlot> pageRewards = getPageRewards(page);
+
+        for (RewardSlot reward : pageRewards) {
+            usedSlots.add(reward.slot());
+            if (claimed.contains(reward.id())) {
+                ItemStack claimedItem = new ItemStack(Material.BARRIER);
+                ItemMeta claimedMeta = claimedItem.getItemMeta();
+                if (claimedMeta != null) {
+                    // Use the reward's name if available, otherwise default to "Reward"
+                    String rewardName = (reward.name() != null && !reward.name().isEmpty()) ? 
+                        LegacyComponentSerializer.legacyAmpersand().deserialize(reward.name()).content() : 
+                        "Reward";
+                    
+                    claimedMeta.displayName(Component.text(rewardName + " (CLAIMED)").color(NamedTextColor.RED));
+                    List<Component> lore = new ArrayList<>();
+                    lore.add(Component.text(statusText).color(NamedTextColor.GOLD)
+                            .append(Component.text(claimedText).color(NamedTextColor.GREEN)));
+                    lore.add(Component.text(requiredTimeText).color(NamedTextColor.GOLD)
+                            .append(Component.text(formatPlaytime(reward.requiredPlaytime())).color(NamedTextColor.YELLOW)));
+                    RewardsGUI.markUnmovable(claimedMeta);
+                    claimedMeta.lore(lore);
+                    claimedItem.setItemMeta(claimedMeta);
+                }
+                inventory.setItem(reward.slot(), claimedItem);
+            } else if (playtime >= reward.requiredPlaytime()) {
+                // Use the new method that supports placeholders
+                ItemStack item = createRewardItem(reward, playerUUID);
+                ItemMeta meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.getPersistentDataContainer().set(rewardIdKey, PersistentDataType.STRING, reward.id());
+                    meta.addEnchant(org.bukkit.enchantments.Enchantment.UNBREAKING, 1, true);
+                    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
+                    List<Component> lore = new ArrayList<>();
+                    List<Component> existingLore = meta.lore();
+                    if (existingLore != null) {
+                        lore.addAll(existingLore);
+                    }
+                    lore.add(Component.empty());
+                    lore.add(Component.text(statusText).color(NamedTextColor.GOLD)
+                            .append(Component.text(readyToClaimText).color(NamedTextColor.GREEN)));
+                    lore.add(Component.text(requiredTimeText).color(NamedTextColor.GOLD)
+                            .append(Component.text(formatPlaytime(reward.requiredPlaytime())).color(NamedTextColor.YELLOW)));
+                    meta.lore(lore);
+                    
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(reward.slot(), item);
+            } else {
+                // Use the new method that supports placeholders
+                ItemStack item = createRewardItem(reward, playerUUID);
+                ItemMeta meta = item.getItemMeta();
+                if (meta != null) {
+                    List<Component> lore = new ArrayList<>();
+                    List<Component> existingLore = meta.lore();
+                    if (existingLore != null) {
+                        lore.addAll(existingLore);
+                    }
+                    lore.add(Component.empty());
+                    lore.add(Component.text(statusText).color(NamedTextColor.GOLD)
+                            .append(Component.text(notClaimedText).color(NamedTextColor.RED)));
+                    lore.add(Component.text(requiredTimeText).color(NamedTextColor.GOLD)
+                            .append(Component.text(formatPlaytime(reward.requiredPlaytime())).color(NamedTextColor.YELLOW)));
+                    lore.add(Component.text(yourTimeText).color(NamedTextColor.GOLD)
+                            .append(Component.text(formatPlaytime(playtime)).color(NamedTextColor.YELLOW)));
+                    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                    meta.lore(lore);
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(reward.slot(), item);
+            }
+        }
+
+        int navigationStartSlot = guiSize - 9;
+        for (int i = 0; i < guiSize; i++) {
+            // Skip slots that are already filled with rewards
+            if (usedSlots.contains(i)) {
+                continue;
+            }
+            
+            // Skip navigation slots if navigation is enabled
+            if (navigationEnabled && guiSize > 9 && i >= navigationStartSlot) {
+                continue;
+            }
+            
+            ItemStack placeholder = new ItemStack(fillUnusedSlots);
+            ItemMeta placeholderMeta = placeholder.getItemMeta();
+            if (placeholderMeta != null) {
+                placeholderMeta.displayName(Component.text(" ")); // Empty name to avoid item name showing
+                RewardsGUI.markUnmovable(placeholderMeta); // Make item non-movable
+                placeholder.setItemMeta(placeholderMeta);
+            }
+            inventory.setItem(i, placeholder);
+        }
+
+        // Add navigation buttons if enabled and there's space
+        if (navigationEnabled && guiSize > 9) {
+            int navRowStart = guiSize - 9;
+            
+            // Previous page button - disabled on first page
+            if (page > 0) {
+                ItemStack prevButton = new NavigationButton(prevPageMaterial, prevPageName, prevPageHeadId).createItem();
+                ItemMeta prevMeta = prevButton.getItemMeta();
+                if (prevMeta != null) {
+                    prevMeta.getPersistentDataContainer().set(navButtonTypeKey, PersistentDataType.STRING, NAV_PREV);
+                    RewardsGUI.markUnmovable(prevMeta); // Unified approach to immovability
+                    prevButton.setItemMeta(prevMeta);
+                }
+                inventory.setItem(navRowStart + 3, prevButton);
+            } else {
+                // Disabled previous button on first page
+                inventory.setItem(navRowStart + 3, createPlaceholderItem(Material.GRAY_STAINED_GLASS_PANE));
+            }
+            
+            // Next page button
+            ItemStack nextButton = new NavigationButton(nextPageMaterial, nextPageName, nextPageHeadId).createItem();
+            ItemMeta nextMeta = nextButton.getItemMeta();
+            if (nextMeta != null) {
+                nextMeta.getPersistentDataContainer().set(navButtonTypeKey, PersistentDataType.STRING, NAV_NEXT);
+                RewardsGUI.markUnmovable(nextMeta); // Unified approach to immovability
+                nextButton.setItemMeta(nextMeta);
+            }
+            inventory.setItem(navRowStart + 5, nextButton);
+            
+            // More rewards coming soon item
+            ItemStack moreRewardsItem = new ItemStack(Material.CHEST);
+            ItemMeta moreRewardsMeta = moreRewardsItem.getItemMeta();
+            if (moreRewardsMeta != null) {
+                moreRewardsMeta.displayName(Component.text("More Rewards").color(NamedTextColor.GOLD));
+                List<Component> lore = new ArrayList<>();
+                lore.add(Component.text("Check back later for new rewards!").color(NamedTextColor.YELLOW));
+                moreRewardsMeta.lore(lore);
+                RewardsGUI.markUnmovable(moreRewardsMeta);
+                moreRewardsItem.setItemMeta(moreRewardsMeta);
+            }
+            inventory.setItem(navRowStart + 5, moreRewardsItem);
+            
+            // Close button
+            ItemStack closeButton = new NavigationButton(closeMaterial, closeName, closeHeadId).createItem();
+            ItemMeta closeMeta = closeButton.getItemMeta();
+            if (closeMeta != null) {
+                closeMeta.getPersistentDataContainer().set(navButtonTypeKey, PersistentDataType.STRING, NAV_CLOSE);
+                RewardsGUI.markUnmovable(closeMeta); // Unified approach to immovability
+                closeButton.setItemMeta(closeMeta);
+            }
+            inventory.setItem(navRowStart + 8, closeButton);
+        }
+
+        return inventory;
+    }
+
     // Creates a navigation button with the specified material, name, headId, and type
     private ItemStack createNavigationButton(Material material, String name, String headId, String buttonType) {
         ItemStack button = new NavigationButton(material, name, headId).createItem();
@@ -414,6 +579,41 @@ public class PlaytimeConfig {
                 }
                 meta.lore(lore);
             }
+            meta.getPersistentDataContainer().set(rewardIdKey, PersistentDataType.STRING, reward.id());
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+    
+    private ItemStack createRewardItem(RewardSlot reward, UUID playerUUID) {
+        ItemStack item;
+        if (reward.headId() != null && !reward.headId().isEmpty() && reward.material() == Material.PLAYER_HEAD) {
+            item = createCustomHead(reward.headId());
+        } else {
+            item = new ItemStack(reward.material());
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            if (reward.name() != null && !reward.name().isEmpty()) {
+                meta.displayName(LegacyComponentSerializer.legacyAmpersand().deserialize(reward.name()));
+            }
+            
+            if (!reward.lore().isEmpty()) {
+                List<Component> lore = new ArrayList<>();
+                // Process placeholders in lore if PlaceholderAPI is available
+                for (String line : reward.lore()) {
+                    String processedLine = line;
+                    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+                        org.bukkit.OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
+                        processedLine = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, processedLine);
+                    }
+                    lore.add(LegacyComponentSerializer.legacyAmpersand().deserialize(processedLine));
+                }
+                meta.lore(lore);
+            }
+            
             meta.getPersistentDataContainer().set(rewardIdKey, PersistentDataType.STRING, reward.id());
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
             item.setItemMeta(meta);

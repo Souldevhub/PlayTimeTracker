@@ -32,6 +32,7 @@
 - **Reduced Console Spam** - Most INFO logs now only appear in debug mode
 - **Better Error Handling** - Improved error messages and warnings for configuration issues
 - **Language Settings** - Added `language` option in config.yml
+- **Lore Placeholder Support** - Added support for PlaceholderAPI placeholders in reward item lore
 
 #### 📋 Commands
 - **Tab Completion** - Added tab completion support for all commands
