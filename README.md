@@ -23,7 +23,7 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 
 - ⏳ Real-time playtime tracking (saved + current session)
 - 🧾 `/playtime` command:
-  - Shows formatted playtime in `Xd Yh Zm`
+  - Shows formatted playtime in `Xd Yh Zm As`
   - Opens a GUI to claim playtime-based rewards
 - 🎁 Reward System:
   - Milestone-based claimable rewards (24 rewards included in current config, with more to be added over time)
@@ -70,7 +70,7 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 | Command                                        | Description                                 | Permission     |
 |------------------------------------------------|---------------------------------------------|----------------|
 | `/playtime`                                    | Shows playtime and rewards GUI              | playtime.use   |
-| `/playtime add <player> <hours>h [<minutes>m]` | Add playtime to player                      | playtime.admin |
+| `/playtime add <player> <hours>h [<minutes>m] [<seconds>s]` | Add playtime to player                      | playtime.admin |
 | `/playtime reset <player>`                     | Reset player's playtime and claimed rewards | playtime.admin |
 | `/playtime reload`                             | Reload plugin configuration                 | playtime.admin |
 | `/playtime debug [true/false]`                 | Toggle debug mode (shows additional logs)   | playtime.admin |
@@ -81,7 +81,7 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 
 | Placeholder                    | Description                                              |
 |--------------------------------|----------------------------------------------------------|
-| `%playtime_overall_formatted%` | Total time (saved + current), formatted like `2d 4h 30m` |
+| `%playtime_overall_formatted%` | Total time (saved + current), formatted like `2d 4h 30m 15s` |
 | `%playtime_formatted%`         | Current session only, formatted                          |
 | `%playtime_overall%`           | Total time in seconds (saved + current)                  |
 | `%playtime_saved%`             | Saved playtime only (in seconds)                         |
@@ -95,11 +95,22 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 
 | Placeholder                             | Description                                              |
 |-----------------------------------------|----------------------------------------------------------|
-| `%playtime_required%`                   | Time required for next unclaimed reward                  |
+| `%playtime_required%`                   | Time required for next logical unclaimed reward (either the next reward in progression or highest qualified unclaimed reward) |
 | `%playtime_required_{rewardId}%`        | Status of specific reward (Claimed/Ready/Not Claimed)    |
 | `%playtime_time_left%`                  | Time left for next reward                                |
 | `%playtime_time_left_{rewardId}%`       | Time left for specific reward                            |
 | `%playtime_claimable_rewards%`          | Number of rewards that can be claimed right now          |
+| `%playtime_next_reward_name%`           | Name of the next logical unclaimed reward                |
+
+### 🏆 Leaderboard Placeholders
+
+| Placeholder                   | Description                              |
+|-------------------------------|------------------------------------------|
+| `%playtime_top_1%`            | 1st place player in playtime leaderboard |
+| `%playtime_top_2%`            | 2nd place player in playtime leaderboard |
+| ...                           | ...                                      |
+| `%playtime_top_10%`           | 10th place player in playtime leaderboard |
+| `%playtime_leaderboard_position%` | Player's position in the leaderboard     |
 
 ### 📋 Placeholder Examples
 
@@ -108,15 +119,21 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
    - `%playtime_days%` → `2`
 
 2. **Reward Status Tracking**:
-   - `%playtime_required%` → `5h 30m` (time for next reward)
+   - `%playtime_required%` → `5h 30m` (time for next logical reward)
    - `%playtime_required_level_5%` → `Claimed` (status of specific reward)
    - `%playtime_time_left_level_5%` → `2h 15m` (time left for specific reward)
    - `%playtime_claimable_rewards%` → `3` (number of claimable rewards)
+   - `%playtime_next_reward_name%` → `Level 5` (name of next reward)
 
-3. **Integration Examples**:
+3. **Leaderboard Integration**:
+   - `%playtime_top_1%` → `Notch (12d 4h 30m)`
+   - `%playtime_top_5%` → `Dream (8d 2h 15m)`
+   - `%playtime_leaderboard_position%` → `5` (player's position)
+
+4. **Integration Examples**:
    - In chat: "You've played for %playtime_overall_formatted%!"
-   - In holograms: "Next reward in: %playtime_time_left%"
-   - In scoreboards: "Claimable Rewards: %playtime_claimable_rewards%"
+   - In holograms: "Next reward (%playtime_next_reward_name%) in: %playtime_time_left%"
+   - In scoreboards: "Leader: %playtime_top_1% | Your rank: #%playtime_leaderboard_position%"
    - In reward lore: "&7Welcome &f%player_name%&7! You have played for &f%playtime_overall_formatted%&7."
 
 ### 🛠️ Placeholder Usage Tips
@@ -130,10 +147,11 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
    - All time values are formatted as `Xd Yh Zm Ws`
    - Empty values are omitted (e.g., `2h 30s` instead of `0d 2h 0m 30s`)
 
-3. **Error Handling**:
-   - Returns `N/A` if PlaceholderAPI integration fails
-   - Returns `Reward not found` for invalid reward IDs
-   - Returns `All rewards claimed` when no more rewards are available
+3. **Next Reward Logic**:
+   - `%playtime_required%` shows either:
+     - The next reward in progression (requires more playtime than current)
+     - The highest reward player has qualified for but not claimed
+   - This provides more intuitive information than simply showing the lowest unclaimed reward
 
 ---
 

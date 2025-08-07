@@ -72,6 +72,10 @@ public class DataHandler {
         saveFile();
     }
 
+    public Map<UUID, Long> getAllPlaytimes() {
+        return new HashMap<>(playtimeCache);
+    }
+
     private void loadAll() {
         for (String key : config.getKeys(false)) {
             try {

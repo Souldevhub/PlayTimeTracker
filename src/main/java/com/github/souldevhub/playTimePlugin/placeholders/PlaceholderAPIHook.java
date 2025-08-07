@@ -11,8 +11,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class PlaceholderAPIHook extends PlaceholderExpansion {
 
@@ -90,6 +93,11 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
         if (params.equalsIgnoreCase("claimable_rewards")) {
             return getClaimableRewardsCount(uuid, overall);
         }
+        
+        // Handle leaderboard placeholders
+        if (params.toLowerCase().startsWith("top_")) {
+            return getLeaderboardPosition(params, uuid, overall);
+        }
 
         return switch (params.toLowerCase()) {
             case "seconds" -> String.valueOf(overall % 60);
@@ -105,6 +113,8 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
             case "required" -> getNextRewardRequiredTime(uuid, overall);
             case "time_left" -> getTimeLeftForNextReward(uuid, overall);
             case "claimable_rewards" -> getClaimableRewardsCount(uuid, overall);
+            case "next_reward_name" -> getNextRewardName(uuid, overall); // New placeholder
+            case "leaderboard_position" -> getPlayerLeaderboardPosition(uuid, overall); // New placeholder
             default -> {
                 if (params.toLowerCase().startsWith("required_status_")) {
                     // %playtime_required_status_rewardId% - Shows status for specific reward
@@ -154,6 +164,157 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
     /*
      * Fully implemented methods for the new placeholders
      */
+     
+    private String getPlayerLeaderboardPosition(UUID uuid, long overall) {
+        if (dataHandler == null) {
+            return "N/A";
+        }
+        
+        try {
+            // Get all players and their playtime
+            Map<UUID, Long> allPlaytimes = dataHandler.getAllPlaytimes();
+            
+            // Add current session times for online players
+            for (UUID playerId : allPlaytimes.keySet()) {
+                long sessionTime = playtimeTracker.getCurrentSessionPlaytime(playerId);
+                allPlaytimes.put(playerId, allPlaytimes.get(playerId) + sessionTime);
+            }
+            
+            // Sort players by playtime in descending order
+            List<Map.Entry<UUID, Long>> sortedPlayers = allPlaytimes.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<UUID, Long>comparingByValue().reversed())
+                    .collect(Collectors.toList());
+            
+            // Find the position of the requesting player
+            for (int i = 0; i < sortedPlayers.size(); i++) {
+                if (sortedPlayers.get(i).getKey().equals(uuid)) {
+                    return String.valueOf(i + 1);
+                }
+            }
+            
+            // Player not found in leaderboard
+            return "Not ranked";
+            
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+     
+    private String getLeaderboardPosition(String params, UUID uuid, long overall) {
+        if (dataHandler == null) {
+            return "N/A";
+        }
+        
+        try {
+            // Extract the position number from params like "top_1", "top_2", etc.
+            String positionStr = params.substring("top_".length());
+            int position = Integer.parseInt(positionStr);
+            
+            // Check if position is within valid range (1-10)
+            if (position < 1 || position > 10) {
+                return "Position out of range (1-10)";
+            }
+            
+            // Get all players and their playtime
+            Map<UUID, Long> allPlaytimes = dataHandler.getAllPlaytimes();
+            
+            // Add current session times for online players
+            for (UUID playerId : allPlaytimes.keySet()) {
+                long sessionTime = playtimeTracker.getCurrentSessionPlaytime(playerId);
+                allPlaytimes.put(playerId, allPlaytimes.get(playerId) + sessionTime);
+            }
+            
+            // Sort players by playtime in descending order and get the top players
+            List<Map.Entry<UUID, Long>> sortedPlayers = allPlaytimes.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<UUID, Long>comparingByValue().reversed())
+                    .limit(10)
+                    .collect(Collectors.toList());
+            
+            // Check if the requested position exists
+            if (position > sortedPlayers.size()) {
+                return "No player at position " + position;
+            }
+            
+            // Get the player at the requested position
+            Map.Entry<UUID, Long> playerEntry = sortedPlayers.get(position - 1);
+            UUID topPlayerUUID = playerEntry.getKey();
+            long playtime = playerEntry.getValue();
+            
+            // Try to get the player's name
+            OfflinePlayer topPlayer = plugin.getServer().getOfflinePlayer(topPlayerUUID);
+            String playerName = topPlayer.getName();
+            if (playerName == null) {
+                playerName = topPlayerUUID.toString(); // Fallback to UUID if name is not available
+            }
+            
+            // Format and return the result
+            return playerName + " (" + formatPlaytime(playtime) + ")";
+            
+        } catch (NumberFormatException e) {
+            return "Invalid position number";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+     
+    private String getNextRewardName(UUID uuid, long overall) {
+        if (playtimeConfig == null || claimedRewardsDataHandler == null) {
+            return "N/A";
+        }
+        
+        List<RewardSlot> rewardSlots = playtimeConfig.getRewardSlots();
+        List<String> claimedRewards = claimedRewardsDataHandler.getClaimedRewards(uuid);
+        
+        RewardSlot nextReward = null;
+        long minRequiredTime = Long.MAX_VALUE;
+        boolean foundUnclaimed = false;
+        
+        // Find the unclaimed reward with the minimum required time that is greater than player's current time
+        for (RewardSlot reward : rewardSlots) {
+            // Skip if reward is already claimed
+            if (claimedRewards.contains(reward.id())) {
+                continue;
+            }
+            
+            // Find the reward with the lowest required time that is greater than current playtime
+            if (reward.requiredPlaytime() > overall && reward.requiredPlaytime() < minRequiredTime) {
+                minRequiredTime = reward.requiredPlaytime();
+                nextReward = reward;
+                foundUnclaimed = true;
+            }
+        }
+        
+        // If we didn't find a reward that requires more time, look for the highest reward they've qualified for but not claimed
+        if (!foundUnclaimed) {
+            for (RewardSlot reward : rewardSlots) {
+                // Skip if reward is already claimed
+                if (claimedRewards.contains(reward.id())) {
+                    continue;
+                }
+                
+                // Find the reward with the highest required time that the player has qualified for
+                if (reward.requiredPlaytime() <= overall && reward.requiredPlaytime() > minRequiredTime) {
+                    minRequiredTime = reward.requiredPlaytime();
+                    nextReward = reward;
+                    foundUnclaimed = true;
+                }
+            }
+        }
+        
+        if (!foundUnclaimed) {
+            return "All rewards claimed";
+        }
+        
+        if (nextReward == null) {
+            return "No rewards available";
+        }
+        
+        // Return the name of the next reward, or the ID if name is not set
+        return nextReward.name() != null && !nextReward.name().isEmpty() ? nextReward.name() : nextReward.id();
+    }
+
     private String getNextRewardRequiredTime(UUID uuid, long overall) {
         if (playtimeConfig == null || claimedRewardsDataHandler == null) {
             return "N/A";
@@ -165,16 +326,35 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
         long minRequiredTime = Long.MAX_VALUE;
         boolean foundUnclaimed = false;
         
+        // Find the unclaimed reward with the minimum required time that is greater than player's current time
+        // This makes more sense as the "next" reward rather than just the lowest unclaimed reward
         for (RewardSlot reward : rewardSlots) {
             // Skip if reward is already claimed
             if (claimedRewards.contains(reward.id())) {
                 continue;
             }
             
-            foundUnclaimed = true;
-            // Find the minimum required time among unclaimed rewards
-            if (reward.requiredPlaytime() < minRequiredTime) {
+            // Only consider rewards that require more time than the player currently has
+            // This ensures we're getting the "next" reward, not just the lowest one
+            if (reward.requiredPlaytime() > overall && reward.requiredPlaytime() < minRequiredTime) {
                 minRequiredTime = reward.requiredPlaytime();
+                foundUnclaimed = true;
+            }
+        }
+        
+        // If we didn't find a reward that requires more time, look for the highest reward they've qualified for but not claimed
+        if (!foundUnclaimed) {
+            for (RewardSlot reward : rewardSlots) {
+                // Skip if reward is already claimed
+                if (claimedRewards.contains(reward.id())) {
+                    continue;
+                }
+                
+                // Find the reward with the highest required time that the player has qualified for
+                if (reward.requiredPlaytime() <= overall && reward.requiredPlaytime() > minRequiredTime) {
+                    minRequiredTime = reward.requiredPlaytime();
+                    foundUnclaimed = true;
+                }
             }
         }
         

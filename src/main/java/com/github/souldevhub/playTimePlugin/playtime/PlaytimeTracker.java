@@ -22,8 +22,8 @@ public class PlaytimeTracker {
 
     private final Map<UUID, Long> sessionTimes = new HashMap<>();
 
-    private static final long TRACK_INTERVAL_SECONDS = 60;
-    private static final int FLUSH_INTERVAL_RUNS = 5;
+    private static final long TRACK_INTERVAL_SECONDS = 1;
+    private static final int FLUSH_INTERVAL_RUNS = 60;
     
     // AFK protection settings
     private static final int DEFAULT_INTERACTION_THRESHOLD = 2;

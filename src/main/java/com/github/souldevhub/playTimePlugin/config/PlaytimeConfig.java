@@ -636,6 +636,7 @@ public class PlaytimeConfig {
         long days = seconds / 86400;
         long hours = (seconds % 86400) / 3600;
         long minutes = (seconds % 3600) / 60;
+        long secs = seconds % 60; // Added seconds
         StringBuilder sb = new StringBuilder();
         if (days > 0) {
             sb.append(days).append("d ");
@@ -644,10 +645,10 @@ public class PlaytimeConfig {
             sb.append(hours).append("h ");
         }
         if (minutes > 0) {
-            sb.append(minutes).append("m");
+            sb.append(minutes).append("m ");
         }
-        if (sb.isEmpty()) {
-            sb.append("0m");
+        if (secs > 0 || sb.length() == 0) { // Include seconds in the output
+            sb.append(secs).append("s");
         }
         return sb.toString().trim();
     }

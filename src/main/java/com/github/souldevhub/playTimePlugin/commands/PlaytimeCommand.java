@@ -48,7 +48,7 @@ public class PlaytimeCommand implements CommandExecutor, TabCompleter {
             } else if (args[0].equalsIgnoreCase("debug")) {
                 return Arrays.asList("true", "false");
             }
-        } else if (args.length == 3 || args.length == 4) {
+        } else if (args.length == 3 || args.length == 4 || args.length == 5) {
             if (args[0].equalsIgnoreCase("add")) {
                 // Provide time format hints
                 List<String> completions = new ArrayList<>();
@@ -56,6 +56,8 @@ public class PlaytimeCommand implements CommandExecutor, TabCompleter {
                     completions.add("<hours>h");
                 } else if (args.length == 4) {
                     completions.add("[<minutes>m]");
+                } else if (args.length == 5) {
+                    completions.add("[<seconds>s]");
                 }
                 return completions;
             }
@@ -120,9 +122,10 @@ public class PlaytimeCommand implements CommandExecutor, TabCompleter {
         long days = totalSeconds / 86400;
         long hours = (totalSeconds % 86400) / 3600;
         long minutes = (totalSeconds % 3600) / 60;
+        long seconds = totalSeconds % 60; // Added seconds
 
         MiniMessage mm = MiniMessage.miniMessage();
-        player.sendMessage(mm.deserialize("<aqua>Your playtime: <gold>" + days + " days</gold>, <gold>" + hours + " hours</gold> and <gold>" + minutes + " minutes</gold>"));
+        player.sendMessage(mm.deserialize("<aqua>Your playtime: <gold>" + days + " days</gold>, <gold>" + hours + " hours</gold>, <gold>" + minutes + " minutes</gold> and <gold>" + seconds + " seconds</gold>"));
 
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1.0f);
 
@@ -135,8 +138,8 @@ public class PlaytimeCommand implements CommandExecutor, TabCompleter {
     }
 
     private void handleAddCommand(@NotNull CommandSender sender, @NotNull String[] args) {
-        if (args.length < 3 || args.length > 4) {
-            sender.sendMessage(Component.text("Usage: /playtime add <player> <hours>h [<minutes>m]", NamedTextColor.RED));
+        if (args.length < 3 || args.length > 5) { // Increased max args to 5
+            sender.sendMessage(Component.text("Usage: /playtime add <player> <hours>h [<minutes>m] [<seconds>s]", NamedTextColor.RED));
             return;
         }
 
@@ -147,24 +150,26 @@ public class PlaytimeCommand implements CommandExecutor, TabCompleter {
         }
 
         @NotNull String hoursStr = args[2].toLowerCase().replace("h", "");
-        @NotNull String minutesStr = args.length == 4 ? args[3].toLowerCase().replace("m", "") : "0";
+        @NotNull String minutesStr = args.length >= 4 ? args[3].toLowerCase().replace("m", "") : "0";
+        @NotNull String secondsStr = args.length == 5 ? args[4].toLowerCase().replace("s", "") : "0"; // Added seconds support
 
         try {
             int hours = Integer.parseInt(hoursStr);
             int minutes = Integer.parseInt(minutesStr);
+            int seconds = Integer.parseInt(secondsStr); // Added seconds parsing
 
-            if (hours < 0 || minutes < 0 || minutes > 59) {
+            if (hours < 0 || minutes < 0 || seconds < 0 || minutes > 59 || seconds > 59) {
                 sender.sendMessage(Component.text("Invalid time values!", NamedTextColor.RED));
                 return;
             }
 
-            long seconds = (hours * 3600L) + (minutes * 60L);
-            dataHandler.addPlaytime(target.getUniqueId(), seconds);
+            long totalSeconds = (hours * 3600L) + (minutes * 60L) + seconds; // Include seconds in total
+            dataHandler.addPlaytime(target.getUniqueId(), totalSeconds);
             dataHandler.savePlaytime(target.getUniqueId());
 
             Component successMessage = Component.text()
                     .append(Component.text("Added ", NamedTextColor.GREEN))
-                    .append(Component.text(hours + "h " + minutes + "m", NamedTextColor.GOLD))
+                    .append(Component.text(hours + "h " + minutes + "m " + seconds + "s", NamedTextColor.GOLD))
                     .append(Component.text(" of playtime to ", NamedTextColor.GREEN))
                     .append(Component.text(target.getName(), NamedTextColor.GOLD))
                     .build();
@@ -178,7 +183,7 @@ public class PlaytimeCommand implements CommandExecutor, TabCompleter {
             // Notify target player
             target.sendMessage(Component.text()
                     .append(Component.text("An admin has added ", NamedTextColor.GREEN))
-                    .append(Component.text(hours + "h " + minutes + "m", NamedTextColor.GOLD))
+                    .append(Component.text(hours + "h " + minutes + "m " + seconds + "s", NamedTextColor.GOLD))
                     .append(Component.text(" to your playtime!", NamedTextColor.GREEN))
                     .build());
             target.playSound(target.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.5f, 1.0f);
