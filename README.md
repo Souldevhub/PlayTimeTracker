@@ -6,7 +6,7 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 
 ## 🌟 Main Features
 
-- ⏳ **Real-time Playtime Tracking** - Accurately tracks how long each player has been on your server
+- ⏳ **Real-time Playtime Tracking** - Accurately tracks how long each player has been on your server (updates every second!)
 - 🎁 **24+ Playtime Rewards** - Milestone-based rewards that players can claim as they play more
 - 📖 **Pageable Rewards GUI** - Easy-to-navigate interface with multiple pages for all rewards
 - 🧾 **Simple Commands** - Intuitive `/playtime` command for players and admin tools
@@ -18,6 +18,7 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 - ⚙️ **Flexible Configuration** - Easily customize all rewards, GUI, and settings
 - 🌍 **Multi-Language Support** - Supports 8 languages including English, Chinese, Russian, German, French, and more
 - 🔧 **Admin Tools** - Reload configuration and debug mode for easier management
+- 🏆 **Leaderboard Support** - Track and display top players with leaderboard placeholders
 
 ## 📦 All Features
 
