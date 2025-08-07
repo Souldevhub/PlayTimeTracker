@@ -4,6 +4,15 @@
 
 ### 🌟 New Features
 
+#### ⏱️ Real-time Tracking
+- **Second-by-Second Updates** - Playtime now updates every second instead of every minute for ultra-precise tracking
+- **Enhanced Accuracy** - More accurate playtime measurement for fair reward distribution
+
+#### 🏆 Leaderboard Support
+- **Top Player Placeholders** - Added placeholders for top 10 players (`%playtime_top_1%` through `%playtime_top_10%`)
+- **Player Position Placeholder** - Added `%playtime_leaderboard_position%` to show a player's rank
+- **Real-time Updates** - Leaderboard updates every second with playtime tracking
+
 #### 🔧 Admin Tools
 - **Reload Command** - Added `/playtime reload` command for administrators to reload configuration without restarting the server
 - **Debug Mode** - Added debug mode with detailed logging for troubleshooting
@@ -28,6 +37,10 @@
 
 ### 🛠️ Improvements
 
+#### ⏱️ Playtime Tracking
+- **Second Precision** - All time displays now include seconds for more precise information
+- **Command Enhancements** - `/playtime add` command now supports seconds parameter (`/playtime add <player> <hours>h [<minutes>m] [<seconds>s]`)
+
 #### 📝 Configuration
 - **Reduced Console Spam** - Most INFO logs now only appear in debug mode
 - **Better Error Handling** - Improved error messages and warnings for configuration issues
@@ -37,6 +50,7 @@
 #### 📋 Commands
 - **Tab Completion** - Added tab completion support for all commands
 - **Permission Checks** - Enhanced permission validation for admin commands
+- **Seconds Support** - Added seconds parameter support to `/playtime add` command
 
 #### 🎯 Logging
 - **Conditional Logging** - Most verbose logs now only appear when debug mode is enabled
@@ -46,12 +60,14 @@
 #### 🧩 Placeholders
 - **Comprehensive Documentation** - Added detailed section in README for all PlaceholderAPI placeholders
 - **Advanced Reward Placeholders** - Documented placeholders for reward status tracking
+- **Leaderboard Placeholders** - Added new leaderboard placeholders for top players and player positions
 - **Usage Examples** - Added practical examples for using placeholders in various contexts
 
 ### 🐛 Bug Fixes
 - **Configuration Validation** - Fixed potential NullPointerExceptions in configuration loading
 - **Reward Processing** - Improved error handling when loading rewards
 - **Language Loading** - Fixed issues with loading translation files
+- **Placeholder Logic** - Improved logic for determining next reward in progression
 
 ### 📖 Documentation
 - **README Updates** - Comprehensive documentation of new features
@@ -59,6 +75,7 @@
 - **Configuration Guide** - Updated configuration documentation with language settings
 - **Installation Guide** - Improved installation instructions
 - **PlaceholderAPI Support** - Added comprehensive section with all placeholders and usage examples
+- **Leaderboard Documentation** - Added documentation for new leaderboard placeholders
 
 ### 📦 For Server Owners
 
@@ -106,6 +123,10 @@ Or use the command:
 - `%playtime_required_{rewardId}%` - Status of specific reward
 - `%playtime_time_left_{rewardId}%` - Time left for specific reward
 - `%playtime_claimable_rewards%` - Number of claimable rewards
+
+**Leaderboard Placeholders**:
+- `%playtime_top_1%` through `%playtime_top_10%` - Top players in playtime
+- `%playtime_leaderboard_position%` - Player's position in leaderboard
 
 See README for complete list and usage examples.
 

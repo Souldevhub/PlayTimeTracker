@@ -80,6 +80,10 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 
 ## 🧩 PlaceholderAPI Support
 
+PlayTimePulse provides comprehensive PlaceholderAPI integration with various categories of placeholders:
+
+### 🕒 Basic Playtime Placeholders
+
 | Placeholder                    | Description                                              |
 |--------------------------------|----------------------------------------------------------|
 | `%playtime_overall_formatted%` | Total time (saved + current), formatted like `2d 4h 30m 15s` |
@@ -97,7 +101,7 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 | Placeholder                             | Description                                              |
 |-----------------------------------------|----------------------------------------------------------|
 | `%playtime_required%`                   | Time required for next logical unclaimed reward (either the next reward in progression or highest qualified unclaimed reward) |
-| `%playtime_required_{rewardId}%`        | Status of specific reward (Claimed/Ready/Not Claimed)    |
+| `%playtime_required_{rewardId}%`        | Status of specific reward (Claimed/Ready/Qualified/Not Qualified) |
 | `%playtime_time_left%`                  | Time left for next reward                                |
 | `%playtime_time_left_{rewardId}%`       | Time left for specific reward                            |
 | `%playtime_claimable_rewards%`          | Number of rewards that can be claimed right now          |
@@ -109,9 +113,36 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
 |-------------------------------|------------------------------------------|
 | `%playtime_top_1%`            | 1st place player in playtime leaderboard |
 | `%playtime_top_2%`            | 2nd place player in playtime leaderboard |
+| `%playtime_top_3%`            | 3rd place player in playtime leaderboard |
+| `%playtime_top_4%`            | 4th place player in playtime leaderboard |
+| `%playtime_top_5%`            | 5th place player in playtime leaderboard |
 | ...                           | ...                                      |
 | `%playtime_top_10%`           | 10th place player in playtime leaderboard |
 | `%playtime_leaderboard_position%` | Player's position in the leaderboard     |
+
+### 🔍 Placeholder Examples
+
+#### 1. **Basic Playtime Display**:
+   - `%playtime_overall_formatted%` → `2d 4h 30m`
+   - `%playtime_days%` → `2`
+
+#### 2. **Reward Status Tracking**:
+   - `%playtime_required%` → `5h 30m` (time for next logical reward)
+   - `%playtime_required_level_5%` → `Claimed` (status of specific reward)
+   - `%playtime_time_left_level_5%` → `2h 15m` (time left for specific reward)
+   - `%playtime_claimable_rewards%` → `3` (number of claimable rewards)
+   - `%playtime_next_reward_name%` → `Level 5` (name of next reward)
+
+#### 3. **Leaderboard Integration**:
+   - `%playtime_top_1%` → `Notch (12d 4h 30m)`
+   - `%playtime_top_5%` → `Dream (8d 2h 15m)`
+   - `%playtime_leaderboard_position%` → `5` (player's position)
+
+#### 4. **Integration Examples**:
+   - In chat: "You've played for %playtime_overall_formatted%!"
+   - In holograms: "Next reward (%playtime_next_reward_name%) in: %playtime_time_left%"
+   - In scoreboards: "Leader: %playtime_top_1% | Your rank: #%playtime_leaderboard_position%"
+   - In reward lore: "&7Welcome &f%player_name%&7! You have played for &f%playtime_overall_formatted%&7."
 
 ### 📋 Placeholder Examples
 
