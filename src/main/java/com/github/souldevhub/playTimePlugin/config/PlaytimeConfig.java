@@ -68,6 +68,7 @@ public class PlaytimeConfig {
     private Material closeMaterial = Material.BARRIER;
     private String closeName = "&c✖ Close";
     private String closeHeadId = null;
+    private boolean disableDefaultRewardInformation = false;
     private final NamespacedKey rewardIdKey;
     private final NamespacedKey navButtonTypeKey;
 
@@ -262,10 +263,12 @@ public class PlaytimeConfig {
                     
                     claimedMeta.displayName(Component.text(rewardName + " (CLAIMED)").color(NamedTextColor.RED));
                     List<Component> lore = new ArrayList<>();
-                    lore.add(Component.text(statusText).color(NamedTextColor.GOLD)
-                            .append(Component.text(claimedText).color(NamedTextColor.GREEN)));
-                    lore.add(Component.text(requiredTimeText).color(NamedTextColor.GOLD)
-                            .append(Component.text(formatPlaytime(reward.requiredPlaytime())).color(NamedTextColor.YELLOW)));
+                    if (!disableDefaultRewardInformation) {
+                        lore.add(Component.text(statusText).color(NamedTextColor.GOLD)
+                                .append(Component.text(claimedText).color(NamedTextColor.GREEN)));
+                        lore.add(Component.text(requiredTimeText).color(NamedTextColor.GOLD)
+                                .append(Component.text(formatPlaytime(reward.requiredPlaytime())).color(NamedTextColor.YELLOW)));
+                    }
                     RewardsGUI.markUnmovable(claimedMeta);
                     claimedMeta.lore(lore);
                     claimedItem.setItemMeta(claimedMeta);
@@ -286,11 +289,13 @@ public class PlaytimeConfig {
                     if (existingLore != null) {
                         lore.addAll(existingLore);
                     }
-                    lore.add(Component.empty());
-                    lore.add(Component.text(statusText).color(NamedTextColor.GOLD)
-                            .append(Component.text(readyToClaimText).color(NamedTextColor.GREEN)));
-                    lore.add(Component.text(requiredTimeText).color(NamedTextColor.GOLD)
-                            .append(Component.text(formatPlaytime(reward.requiredPlaytime())).color(NamedTextColor.YELLOW)));
+                    if (!disableDefaultRewardInformation) {
+                        lore.add(Component.empty());
+                        lore.add(Component.text(statusText).color(NamedTextColor.GOLD)
+                                .append(Component.text(readyToClaimText).color(NamedTextColor.GREEN)));
+                        lore.add(Component.text(requiredTimeText).color(NamedTextColor.GOLD)
+                                .append(Component.text(formatPlaytime(reward.requiredPlaytime())).color(NamedTextColor.YELLOW)));
+                    }
                     meta.lore(lore);
                     
                     item.setItemMeta(meta);
@@ -307,13 +312,15 @@ public class PlaytimeConfig {
                     if (existingLore != null) {
                         lore.addAll(existingLore);
                     }
-                    lore.add(Component.empty());
-                    lore.add(Component.text(statusText).color(NamedTextColor.GOLD)
-                            .append(Component.text(notClaimedText).color(NamedTextColor.RED)));
-                    lore.add(Component.text(requiredTimeText).color(NamedTextColor.GOLD)
-                            .append(Component.text(formatPlaytime(reward.requiredPlaytime())).color(NamedTextColor.YELLOW)));
-                    lore.add(Component.text(yourTimeText).color(NamedTextColor.GOLD)
-                            .append(Component.text(formatPlaytime(playtime)).color(NamedTextColor.YELLOW)));
+                    if (!disableDefaultRewardInformation) {
+                        lore.add(Component.empty());
+                        lore.add(Component.text(statusText).color(NamedTextColor.GOLD)
+                                .append(Component.text(notClaimedText).color(NamedTextColor.RED)));
+                        lore.add(Component.text(requiredTimeText).color(NamedTextColor.GOLD)
+                                .append(Component.text(formatPlaytime(reward.requiredPlaytime())).color(NamedTextColor.YELLOW)));
+                        lore.add(Component.text(yourTimeText).color(NamedTextColor.GOLD)
+                                .append(Component.text(formatPlaytime(playtime)).color(NamedTextColor.YELLOW)));
+                    }
                     meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     meta.lore(lore);
                     item.setItemMeta(meta);
@@ -394,10 +401,12 @@ public class PlaytimeConfig {
                     
                     claimedMeta.displayName(Component.text(rewardName + " (CLAIMED)").color(NamedTextColor.RED));
                     List<Component> lore = new ArrayList<>();
-                    lore.add(Component.text(statusText).color(NamedTextColor.GOLD)
-                            .append(Component.text(claimedText).color(NamedTextColor.GREEN)));
-                    lore.add(Component.text(requiredTimeText).color(NamedTextColor.GOLD)
-                            .append(Component.text(formatPlaytime(reward.requiredPlaytime())).color(NamedTextColor.YELLOW)));
+                    if (!disableDefaultRewardInformation) {
+                        lore.add(Component.text(statusText).color(NamedTextColor.GOLD)
+                                .append(Component.text(claimedText).color(NamedTextColor.GREEN)));
+                        lore.add(Component.text(requiredTimeText).color(NamedTextColor.GOLD)
+                                .append(Component.text(formatPlaytime(reward.requiredPlaytime())).color(NamedTextColor.YELLOW)));
+                    }
                     RewardsGUI.markUnmovable(claimedMeta);
                     claimedMeta.lore(lore);
                     claimedItem.setItemMeta(claimedMeta);
@@ -417,11 +426,13 @@ public class PlaytimeConfig {
                     if (existingLore != null) {
                         lore.addAll(existingLore);
                     }
-                    lore.add(Component.empty());
-                    lore.add(Component.text(statusText).color(NamedTextColor.GOLD)
-                            .append(Component.text(readyToClaimText).color(NamedTextColor.GREEN)));
-                    lore.add(Component.text(requiredTimeText).color(NamedTextColor.GOLD)
-                            .append(Component.text(formatPlaytime(reward.requiredPlaytime())).color(NamedTextColor.YELLOW)));
+                    if (!disableDefaultRewardInformation) {
+                        lore.add(Component.empty());
+                        lore.add(Component.text(statusText).color(NamedTextColor.GOLD)
+                                .append(Component.text(readyToClaimText).color(NamedTextColor.GREEN)));
+                        lore.add(Component.text(requiredTimeText).color(NamedTextColor.GOLD)
+                                .append(Component.text(formatPlaytime(reward.requiredPlaytime())).color(NamedTextColor.YELLOW)));
+                    }
                     meta.lore(lore);
                     
                     item.setItemMeta(meta);
@@ -437,13 +448,15 @@ public class PlaytimeConfig {
                     if (existingLore != null) {
                         lore.addAll(existingLore);
                     }
-                    lore.add(Component.empty());
-                    lore.add(Component.text(statusText).color(NamedTextColor.GOLD)
-                            .append(Component.text(notClaimedText).color(NamedTextColor.RED)));
-                    lore.add(Component.text(requiredTimeText).color(NamedTextColor.GOLD)
-                            .append(Component.text(formatPlaytime(reward.requiredPlaytime())).color(NamedTextColor.YELLOW)));
-                    lore.add(Component.text(yourTimeText).color(NamedTextColor.GOLD)
-                            .append(Component.text(formatPlaytime(playtime)).color(NamedTextColor.YELLOW)));
+                    if (!disableDefaultRewardInformation) {
+                        lore.add(Component.empty());
+                        lore.add(Component.text(statusText).color(NamedTextColor.GOLD)
+                                .append(Component.text(notClaimedText).color(NamedTextColor.RED)));
+                        lore.add(Component.text(requiredTimeText).color(NamedTextColor.GOLD)
+                                .append(Component.text(formatPlaytime(reward.requiredPlaytime())).color(NamedTextColor.YELLOW)));
+                        lore.add(Component.text(yourTimeText).color(NamedTextColor.GOLD)
+                                .append(Component.text(formatPlaytime(playtime)).color(NamedTextColor.YELLOW)));
+                    }
                     meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     meta.lore(lore);
                     item.setItemMeta(meta);
@@ -493,28 +506,32 @@ public class PlaytimeConfig {
                 inventory.setItem(navRowStart + 3, createPlaceholderItem(Material.GRAY_STAINED_GLASS_PANE));
             }
             
-            // Next page button
-            ItemStack nextButton = new NavigationButton(nextPageMaterial, nextPageName, nextPageHeadId).createItem();
-            ItemMeta nextMeta = nextButton.getItemMeta();
-            if (nextMeta != null) {
-                nextMeta.getPersistentDataContainer().set(navButtonTypeKey, PersistentDataType.STRING, NAV_NEXT);
-                RewardsGUI.markUnmovable(nextMeta); // Unified approach to immovability
-                nextButton.setItemMeta(nextMeta);
+            // Check if this is the last page with rewards
+            int totalPages = getTotalPages();
+            if (page < totalPages - 1) {
+                // Next page button
+                ItemStack nextButton = new NavigationButton(nextPageMaterial, nextPageName, nextPageHeadId).createItem();
+                ItemMeta nextMeta = nextButton.getItemMeta();
+                if (nextMeta != null) {
+                    nextMeta.getPersistentDataContainer().set(navButtonTypeKey, PersistentDataType.STRING, NAV_NEXT);
+                    RewardsGUI.markUnmovable(nextMeta); // Unified approach to immovability
+                    nextButton.setItemMeta(nextMeta);
+                }
+                inventory.setItem(navRowStart + 5, nextButton);
+            } else {
+                // More rewards coming soon item
+                ItemStack moreRewardsItem = new ItemStack(Material.CHEST);
+                ItemMeta moreRewardsMeta = moreRewardsItem.getItemMeta();
+                if (moreRewardsMeta != null) {
+                    moreRewardsMeta.displayName(Component.text("More Rewards").color(NamedTextColor.GOLD));
+                    List<Component> lore = new ArrayList<>();
+                    lore.add(Component.text("Check back later for new rewards!").color(NamedTextColor.YELLOW));
+                    moreRewardsMeta.lore(lore);
+                    RewardsGUI.markUnmovable(moreRewardsMeta);
+                    moreRewardsItem.setItemMeta(moreRewardsMeta);
+                }
+                inventory.setItem(navRowStart + 5, moreRewardsItem);
             }
-            inventory.setItem(navRowStart + 5, nextButton);
-            
-            // More rewards coming soon item
-            ItemStack moreRewardsItem = new ItemStack(Material.CHEST);
-            ItemMeta moreRewardsMeta = moreRewardsItem.getItemMeta();
-            if (moreRewardsMeta != null) {
-                moreRewardsMeta.displayName(Component.text("More Rewards").color(NamedTextColor.GOLD));
-                List<Component> lore = new ArrayList<>();
-                lore.add(Component.text("Check back later for new rewards!").color(NamedTextColor.YELLOW));
-                moreRewardsMeta.lore(lore);
-                RewardsGUI.markUnmovable(moreRewardsMeta);
-                moreRewardsItem.setItemMeta(moreRewardsMeta);
-            }
-            inventory.setItem(navRowStart + 5, moreRewardsItem);
             
             // Close button
             ItemStack closeButton = new NavigationButton(closeMaterial, closeName, closeHeadId).createItem();
@@ -690,6 +707,9 @@ public class PlaytimeConfig {
                 plugin.getLogger().warning("Invalid fill-unused-slots material: " + fillMaterialStr + ", using BLACK_STAINED_GLASS_PANE");
                 fillUnusedSlots = Material.BLACK_STAINED_GLASS_PANE;
             }
+            
+            // Load the disable-default-reward-information setting
+            disableDefaultRewardInformation = config.getBoolean("disable-default-reward-information", false);
             
             if (config.isConfigurationSection("gui.navigation")) {
                 if (plugin instanceof PlaytimePulse playtimePulse && playtimePulse.isDebugMode()) {
@@ -868,4 +888,9 @@ public class PlaytimeConfig {
     public String getNoRewardsAvailableText() {
         return noRewardsAvailableText;
     }
+    
+    public boolean isDisableDefaultRewardInformation() {
+        return disableDefaultRewardInformation;
+    }
+    
 }

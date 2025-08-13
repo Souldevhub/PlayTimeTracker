@@ -1,5 +1,32 @@
 # 📜 PlayTimePulse Changelog
 
+## 🚀 Version 1.0.5-SNAPSHOT
+
+### 🌟 New Features
+
+#### 🎁 Reward System Customization
+- **Customizable Reward Information Display** - Added `disable-default-reward-information` config option to control what information is automatically shown on reward items
+  - When set to `false` (default), shows status, required time, and your time information on reward items
+  - When set to `true`, only displays lore defined in the config file, allowing complete customization
+  - This feature gives server owners full control over how reward information is displayed
+
+#### 📖 Pageable Rewards GUI Improvements
+- **Fixed Navigation Bug** - Resolved critical issue where navigation between pages was not working correctly in some cases
+  - Players can now properly navigate between reward pages
+  - "More Rewards Coming Soon" item now correctly displays only when there are truly no more pages with rewards
+
+#### 🛠️ Configuration Improvements
+- **Default Minecraft Rewards** - Updated levels 20-23 to use default Minecraft items and commands instead of plugin-specific ones
+  - Ensures compatibility with any vanilla Minecraft server
+  - Uses valuable Minecraft items like Enchanted Golden Apples, Totems of Undying, and Enchanted Books
+  - No longer requires external plugins like economy or modifier plugins
+
+### 🛠️ Improvements
+
+#### ⚙️ Configuration
+- **Cleaner Config Structure** - Removed unnecessary `clear-default-rewards` parameter since users can simply delete config themselves
+- **Improved YAML Formatting** - Fixed indentation issues in config.yml for better readability and parsing
+
 ## 🚀 Version 1.0.4-SNAPSHOT
 
 ### 🌟 New Features

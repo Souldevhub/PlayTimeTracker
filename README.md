@@ -33,11 +33,13 @@ A lightweight, accurate Minecraft plugin that tracks player playtime, integrates
   - Player head support for GUI icons (e.g., custom heads, player skulls)
   - Custom sound effects when claiming rewards
   - Error handling for failed commands to prevent reward spamming
+  - **Customizable Reward Information Display** - Control what information is automatically shown on reward items with `disable-default-reward-information` config option
 - 📖 Pageable Rewards GUI:
   - Pagination support for large numbers of rewards
   - Customizable slots per page
   - Navigation buttons for moving between pages
   - "More Rewards Coming Soon" item displayed on last page
+  - **Fixed Navigation Bug** - Resolved issue where navigation between pages was not working correctly in some cases
 - 🧭 Navigation System:
   - Previous/Next page buttons
   - Close button to exit the GUI

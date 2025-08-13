@@ -23,6 +23,11 @@
 # Debug mode - enables additional logging
 debug: false
 
+# Disable default reward information - prevents automatic addition of status,
+# required time, and your time information to reward items
+# When set to true, only the lore defined in the config will be displayed
+disable-default-reward-information: false
+
 # Language settings
 # Available languages: en (English), zh (Chinese), pt_BR (Brazilian Portuguese), 
 # ru (Russian), fil (Filipino), de (German), fr (French), fi (Finnish)
@@ -566,3 +571,87 @@ rewards:
       - give %player% golden_apple 16
       - give %player% experience_bottle 64
       - xp add %player% 4000 points
+
+  level_20:
+    id: level_20
+    name: '&5Level 20'
+    material: PLAYER_HEAD
+    headId: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTE2NWYwNzIxOGU3ZWY5MmE1ZTIxNzg4OGFkZjM3ZjkyYmYzMDAzODBiOTA4ODRjNzQ2YWNlODFmYTdjYjg2NyJ9fX0=
+    slot: 27
+    page: 1
+    claimSound: entity.player.levelup
+    lore:
+      - '&7The shadows grow darker, but so does your power.'
+      - '&7Rewards: &b64 Enchanted Golden Apples&7, &a32 Totems of Undying&7, &e64
+        Enchanted Books (Mending)'
+    requiredPlaytime: 198000
+    commands:
+      - say %player% has reached Level 20!
+      - title %player% title {"text":"Level 20","color":"dark_purple","bold":true}
+      - title %player% subtitle {"text":"The shadows grow darker","color":"light_purple","italic":true}
+      - give %player% enchanted_golden_apple 64
+      - give %player% totem_of_undying 32
+      - give %player% enchanted_book{StoredEnchantments:[{id:"minecraft:mending",lvl:1}]} 64
+
+  level_21:
+    id: level_21
+    name: '&5Level 21'
+    material: PLAYER_HEAD
+    headId: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTE2NWYwNzIxOGU3ZWY5MmE1ZTIxNzg4OGFkZjM3ZjkyYmYzMDAzODBiOTA4ODRjNzQ2YWNlODFmYTdjYjg2NyJ9fX0=
+    slot: 9
+    page: 1
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Your legend whispers through ancient halls...'
+      - '&7Rewards: &b32 Enchanted Golden Apples&7, &a16 Totems of Undying&7, &e32
+        Enchanted Books (Mending)'
+    requiredPlaytime: 216000
+    commands:
+      - say %player% has reached Level 21!
+      - title %player% title {"text":"Level 21","color":"dark_purple","bold":true}
+      - title %player% subtitle {"text":"Your legend whispers through ancient halls","color":"light_purple","italic":true}
+      - give %player% enchanted_golden_apple 32
+      - give %player% totem_of_undying 16
+      - give %player% enchanted_book{StoredEnchantments:[{id:"minecraft:mending",lvl:1}]} 32
+
+  level_22:
+    id: level_22
+    name: '&5Level 22'
+    material: PLAYER_HEAD
+    headId: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTE2NWYwNzIxOGU3ZWY5MmE1ZTIxNzg4OGFkZjM3ZjkyYmYzMDAzODBiOTA4ODRjNzQ2YWNlODFmYTdjYjg2NyJ9fX0=
+    slot: 0
+    page: 1
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Stand tall—Nytherra bows to your might.'
+      - '&7Rewards: &b16 Enchanted Golden Apples&7, &a8 Totems of Undying&7, &e16
+        Enchanted Books (Mending)'
+    requiredPlaytime: 234000
+    commands:
+      - say %player% has reached Level 22!
+      - title %player% title {"text":"Level 22","color":"dark_purple","bold":true}
+      - title %player% subtitle {"text":"Stand tall—Nytherra bows to your might","color":"light_purple","italic":true}
+      - give %player% enchanted_golden_apple 16
+      - give %player% totem_of_undying 8
+      - give %player% enchanted_book{StoredEnchantments:[{id:"minecraft:mending",lvl:1}]} 16
+
+  level_23:
+    id: level_23
+    name: '&5Level 23'
+    material: PLAYER_HEAD
+    headId: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTE2NWYwNzIxOGU3ZWY5MmE1ZTIxNzg4OGFkZjM3ZjkyYmYzMDAzODBiOTA4ODRjNzQ2YWNlODFmYTdjYjg2NyJ9fX0=
+    slot: 1
+    page: 1
+    claimSound: entity.player.levelup
+    lore:
+      - '&7Stand tall—Nytherra bows to your might.'
+      - '&7Rewards: &b8 Enchanted Golden Apples&7, &a4 Totems of Undying&7, &e8
+        Enchanted Books (Mending)'
+    requiredPlaytime: 252000
+    commands:
+      - say %player% has reached Level 23!
+      - title %player% title {"text":"Level 23","color":"dark_purple","bold":true}
+      - title %player% subtitle {"text":"Stand tall—Nytherra bows to your might","color":"light_purple","italic":true}
+      - give %player% enchanted_golden_apple 8
+      - give %player% totem_of_undying 4
+      - give %player% enchanted_book{StoredEnchantments:[{id:"minecraft:mending",lvl:1}]} 8
